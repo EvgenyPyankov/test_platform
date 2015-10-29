@@ -68,6 +68,7 @@ public class HelloWorldResource {
                 sb.append(c1);
             }
         }
+        //Utils.sendMail("i.got.that.flower@gmail.com","one-one-one", "subject");
         return sb.toString();
     }
 
