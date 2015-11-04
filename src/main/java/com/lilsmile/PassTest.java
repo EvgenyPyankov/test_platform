@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Smile on 04.11.15.
@@ -47,7 +48,23 @@ public class PassTest implements Constants{
         currentTest.put(TEST_CATEGORY,test.getTestCategory());
         currentTest.put(TITLE,test.getTitle());
         currentTest.put(AUTHOR,test.getAuthor());
-        currentTest.put(DATE,test.getDate());
+        Date date = test.getDate();
+        int year = date.getYear()+1900;
+        int month = date.getMonth();
+        int day = date.getDay();
+        StringBuilder sb = new StringBuilder();
+        sb.append(year).append("-");
+        if (month<10)
+        {
+            sb.append("0");
+        }
+        sb.append(month).append("-");
+        if (day<10)
+        {
+            sb.append(0);
+        }
+        sb.append(day);
+        currentTest.put(DATE,sb.toString());
         currentTest.put(DESCRIPTION,test.getDescription());
         ArrayList<Question> questions = test.getQuestions();
         JSONArray jsonArrayQuestions = new JSONArray();
