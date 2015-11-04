@@ -12,48 +12,12 @@
 <body>
 <div class="container col-md-6 col-md-offset-3" style="margin-top:50px;margin-bottom:100px">
 	<p><a href="choose_test.html">Back to the menu</a></p>
-
-	<h1 class="text-center">Math test</h1>
-
+	<h1 class="text-center" id="testTitle"></h1>
+	<p class="test-justify" id="testDesc"></p>
 	<p class="text-justify">Read questions and choose your answers carefully.<br/>
 		You have to choose one of the options and you can't choose multiple ones. <br/>
 		Once you're done, press the <span class="bg-success">Submit</span> button.</p>
-
-	<div class="alert alert-info fade in">
-		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		You can only pass this test once.
-	</div>
-
-	<div class="well text-center">Good luck! <br/>
-		TODO: Check radios, mark answered
-	</div>
-	<div id="questionsPanel">
-		<div class="panel panel-default">
-			<div class="panel-heading">Question 0: Blah-blah-blah? <span
-					class="glyphicon glyphicon-ok pull-right hide"></span></div>
-			<div class="panel-body">
-				<div class="col-md-6">
-					<div class="radio">
-						<label><input type="radio" name="optradio">Option 1</label>
-					</div>
-					<div class="radio">
-						<label><input type="radio" name="optradio">Option 2</label>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="radio">
-						<label><input type="radio" name="optradio">Option 3</label>
-					</div>
-					<div class="radio">
-						<label><input type="radio" name="optradio">Option 4</label>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-	</div>
-
+	<div id="questionsPanel"></div>
 	<input type="button" class="btn btn-lg btn-success pull-right" value="Submit Answers"
 		   onclick="window.location.href='choose_test.html'">
 </div>
