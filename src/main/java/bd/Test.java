@@ -4,6 +4,62 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Test {
+    public int getIdTest() {
+        return idTest;
+    }
+
+    public void setIdTest(int idTest) {
+        this.idTest = idTest;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getTestCategory() {
+        return testCategory;
+    }
+
+    public void setTestCategory(String testCategory) {
+        this.testCategory = testCategory;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(ArrayList<Question> questions) {
+        this.questions = questions;
+    }
+
     protected int idTest;
     protected String author;
     protected String testCategory;
@@ -22,4 +78,6 @@ public class Test {
         this.date=date;
         this.questions=questions;
     }
+
+
 }

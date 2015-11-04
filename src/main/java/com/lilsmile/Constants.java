@@ -1,10 +1,19 @@
 package com.lilsmile;
 
 /**
- * Created by Smile on 29.10.15.
+ * Created by Smile on 04.11.15.
  */
 public interface Constants {
-    String MAIL_FROM = "igorvviha@mail.ru";
-    String PASSWORD = "146146i";
-    String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+
+    String TEST_ID = "test_id";
+    String AUTHOR = "author";
+    String TEST_CATEGORY = "test_category";
+    String TITLE = "title";
+    String DESCRIPTION = "description";
+    String DATE = "date";
+    String QUESTIONS = "questions";
+    String ANSWERS = "answers";
+    String NUMBER = "number";
+    String WEIGHT = "weight";
+
 }
