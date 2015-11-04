@@ -60,7 +60,7 @@ public class Test {
         this.questions = questions;
     }
 
-    protected int idTest;
+    private int idTest;
     private String author;
     private String testCategory;
     private String title;

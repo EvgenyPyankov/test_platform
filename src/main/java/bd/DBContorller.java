@@ -11,7 +11,7 @@ public class DBContorller implements DBControllerMethods{
 
     public Test getTestById(int id){
        for (Test item:tests)
-           if (item.idTest==id)
+           if (item.getIdTest()==id)
                return item;
         System.err.println("Not found!");
         return null;
