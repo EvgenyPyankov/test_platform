@@ -53,7 +53,7 @@ function printDescription(arg) {
 function sendTestAnswers() {
 	$.ajax({
 		type: "POST",
-		url: "/rest/passed_test",
+		url: "rest/tests/passed_test",
 		data: populateData(),
 		dataType: "json"
 	});

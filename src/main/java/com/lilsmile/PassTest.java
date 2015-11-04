@@ -40,6 +40,17 @@ public class PassTest implements Constants{
         return testToJson(dbController.getTestById(Integer.valueOf(idString).intValue())).toString();
     }
 
+    @POST
+    @Path("/passed_test")
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String passedTest(String body)
+    {
+        Mail mail = new Mail();
+        mail.sendEmail(body);
+        return null;
+    }
+
+
 
     private JSONObject testToJson(Test test)
     {
