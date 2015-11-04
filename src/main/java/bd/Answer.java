@@ -1,9 +1,9 @@
 package bd;
 
 public class Answer {
-    protected int number;
-    protected String title;
-    protected int weight;
+    private int number;
+    private String title;
+    private int weight;
 
     public Answer(int number, String title, int weight){
         this.number=number;

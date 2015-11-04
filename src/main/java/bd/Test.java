@@ -61,12 +61,12 @@ public class Test {
     }
 
     protected int idTest;
-    protected String author;
-    protected String testCategory;
-    protected String title;
-    protected String description;
-    protected Date date;
-    protected ArrayList<Question> questions;
+    private String author;
+    private String testCategory;
+    private String title;
+    private String description;
+    private Date date;
+    private ArrayList<Question> questions;
 
 
     public Test(int idTest,String author,String testCategory,String title,String description,Date date,ArrayList<Question>questions){
