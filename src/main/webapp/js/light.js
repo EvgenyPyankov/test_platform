@@ -55,7 +55,7 @@ function sendTestAnswers() {
 		type: "POST",
 		url: "rest/tests/passed_test",
 		data: populateData(),
-		dataType: "json"
+		dataType: "application/json"
 	});
 	alert("Results have been sent. Press OK to return to tests list");
 	window.location.href = 'choose_test.html';

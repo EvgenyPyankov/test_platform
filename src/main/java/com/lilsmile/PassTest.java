@@ -6,8 +6,11 @@ import org.json.simple.JSONObject;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 /**
  * Created by Smile on 04.11.15.
@@ -16,10 +19,20 @@ import java.util.Date;
 public class PassTest implements Constants{
 
     DBControllerMethods dbController = new DBContorller();
+    private static Logger log;
+    static {
+        try {
+            log =  Logger.getLogger(PassTest.class.getName());
+            log.addHandler(new FileHandler("log.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getTests(@PathParam("id") String idString)
+    public String getTests()
     {
         ArrayList<Test> tests = dbController.getTests();
         JSONArray jsonArray = new JSONArray();
@@ -27,7 +40,7 @@ public class PassTest implements Constants{
         {
             jsonArray.add(testToJson(test));
         }
-
+        log.info("Send all tests");
         return jsonArray.toString();
     }
 
@@ -36,15 +49,16 @@ public class PassTest implements Constants{
     @Produces(MediaType.APPLICATION_JSON)
     public String getTestById(@QueryParam("id") String idString)
     {
-
+        log.info("Send test #"+idString);
         return testToJson(dbController.getTestById(Integer.valueOf(idString).intValue())).toString();
     }
 
     @POST
     @Path("/passed_test")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     public String passedTest(String body)
     {
+        log.info("get body:\n"+body);
         Mail mail = new Mail();
         mail.sendEmail(body);
         return null;
