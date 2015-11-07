@@ -82,7 +82,7 @@ function auth(username, hash) {
 		contentType: 'application/json; charset=utf-8',
 		async: false,
 		success: function () {
-			alert("Success!");
+			window.location.href = 'choose_test.html';
 		}
 	});
 }
@@ -105,5 +105,37 @@ function getParamValue(name) {
 	else {
 		return results[1] || 0;
 	}
+}
+
+function validateEmail() {
+	var regx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
+	if (regx.test($('#inputEmail').val())) {
+		$("#emailHelp").html("");
+		return true;
+	}
+	else {
+		$("#emailHelp").html("Enter a valid email!");
+		return false;
+	}
+}
+
+function validatePassword() {
+	if ($('#inputPassword').val().length != 0) {
+		return true;
+	}
+	else {
+		$("#passHelp").html("Enter a password!");
+		return false;
+	}
+}
+
+function logIn() {
+	if (validateEmail() && validatePassword()) {
+		auth($("#inputEmail").val(), $("#inputPassword").val());
+	}
+}
+
+function signUp() {
+
 }
 
