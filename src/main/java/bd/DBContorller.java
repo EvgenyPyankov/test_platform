@@ -79,5 +79,16 @@ public class DBContorller implements DBControllerMethods{
         questions.add(new Question(5,"I have diarrhea, constipation, or other digestive problems", answers));
 
         tests.add(new Test(3,"Igor2","Math","Test 3","blablablablabla",new Date(),questions));
+
+        questions = new ArrayList<Question>();
+        answers = new ArrayList<Answer>();
+
+        answers.add(new Answer(1,"Yes",1));
+        answers.add(new Answer(2,"No",1));
+
+        questions.add(new Question(1," Does it work?", answers));
+        questions.add(new Question(2,"Does it really work?", answers));
+
+        tests.add(new Test(4,"Lightless","TEST","Test for testing","Random questions to waste your time",new Date(),questions));
     }
 }
