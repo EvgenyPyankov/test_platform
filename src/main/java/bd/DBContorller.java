@@ -5,8 +5,10 @@ import java.util.Date;
 
 public class DBContorller implements DBControllerMethods{
     private ArrayList<Test> tests = new ArrayList<Test>();
+    private ArrayList<User> users = new ArrayList<User>();
     public DBContorller(){
         createTests();
+        createUsers();
     }
 
     public Test getTestById(int id){
@@ -19,6 +21,29 @@ public class DBContorller implements DBControllerMethods{
 
     public ArrayList<Test> getTests(){
         return tests;
+    }
+
+    public void addUser(User user){
+        users.add(user);
+    }
+
+    public User getUserByLogin(String login){
+        for(User item:users)
+            if (item.getLogin().equals(login))
+                return item;
+        return null;
+    }
+
+    public User getUserByEmail(String email){
+        for (User item:users)
+            if (item.getEmail().equals(email))
+                return item;
+        return null;
+    }
+
+    private void createUsers(){
+        users.add(new User("kingOfTheWorld","king@gmail.com",777));
+        users.add(new User("admin","admin@gmail.com",555));
     }
 
     private void createTests(){
