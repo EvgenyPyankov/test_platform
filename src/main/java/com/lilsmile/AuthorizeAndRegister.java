@@ -1,6 +1,10 @@
 package com.lilsmile;
 
+import bd.DBContorller;
+import bd.DBControllerMethods;
+import bd.User;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -14,27 +18,67 @@ import java.util.Random;
 @Path("/auth")
 public class AuthorizeAndRegister implements Constants {
 
+    DBControllerMethods dbController = new DBContorller();
+
+
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public String logIn(String body)
     {
-        JSONObject jsonObject = new JSONObject();
-        Random random = new Random();
-        int token = random.nextInt(59123);
-        jsonObject.put(TOKEN, token);
-
-        return jsonObject.toString();
+        JSONObject jsonBody = (JSONObject) JSONValue.parse(body);
+        String login = (String) jsonBody.get(LOGIN);
+        String password = (String) jsonBody.get(PASSWORD);
+        JSONObject response = new JSONObject();
+        if (dbController.getUserByEmail(login).equals(null) || dbController.getUserByLogin(login).equals(null))
+        {
+            response.put(RESULT, WRONG_LOGIN);
+        } else
+        {
+            //todo: add passwd check
+            char[] arr = login.toCharArray();
+            response.put(TOKEN, generateToken(arr));
+        }
+        return response.toString();
     }
+
+    private String generateToken(char[] arr)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i<arr.length; i++)
+        {
+            sb.append((char)(arr[i]+i*2));
+        }
+        return sb.toString();
+    }
+
 
     @POST
     @Path("/signup")
     @Consumes(MediaType.APPLICATION_JSON)
     public String signUp(String body)
     {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(RESULT,OK);
-        return jsonObject.toString();
+        JSONObject response = new JSONObject();
+        JSONObject jsonBody = (JSONObject) JSONValue.parse(body);
+        String email = (String) jsonBody.get(EMAIL);
+        String login = (String) jsonBody.get(LOGIN);
+        String password = (String) jsonBody.get(PASSWORD);
+        if (dbController.getUserByLogin(login).equals(null))
+        {
+            if (dbController.getUserByEmail(email).equals(null))
+            {
+                dbController.addUser(new User(login, email, password.hashCode()));
+                response.put(TOKEN, generateToken(login.toCharArray()));
+            } else
+            {
+                response.put(RESULT, BAD_EMAIL);
+            }
+        } else
+        {
+            response.put(RESULT, BAD_LOGIN);
+        }
+
+        return response.toString();
     }
 
 

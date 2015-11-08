@@ -19,8 +19,18 @@ public interface Constants {
 
     //codes for signup
     String OK="200";
-    String BAD_LOGIn="205";
+    String BAD_LOGIN="205";
     String BAD_EMAIL="210";
+    //codes for login
+    String WRONG_PASSWORD="250";
+    String WRONG_LOGIN="255";
+
+    String LOGIN = "login";
+    String PASSWORD = "password";
+    String EMAIL = "email";
+
     String RESULT="result";
+
+
 
 }
