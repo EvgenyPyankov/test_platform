@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create test</title>
+	<script src="js/create_test.js"></script>
+</head>
+<body>
+<div>
+<form >
+	<div class="form-header">
+		<p>Title:</p> <input type="text" name="title">
+		<p>Description:</p><textarea name="description"></textarea>
+	</div>
+	<div id="questions">
+		<div class="question" id="question1">
+			<div class="question-header">
+				<div class="question-title">
+					<p>Question:</p><p><input type="text" name="question"> </p>
+				</div>
+				<select name="question-type">
+					<option disabled >Choose the question type</option>
+					<option value="1" selected>One from many</option>
+					<option value="2">Many from many</option>
+					<option value="3">Text</option>
+				</select>
+				<select name="number-of-answer">
+					<option disabled>Answers Number</option>
+					<option value="1">One</option>
+					<option value="2">Two</option>
+					<option value="3">Three</option>
+					<option value="4" selected>Four</option>
+					<option value="5">Five</option>
+					<option value="6">Six</option>
+				</select>
+			</div>
+			<div class="question-answers">
+				<p>Answers:</p>	
+				<p><input type="radio" name="1" disabled> <input type="text" name="answer1"> </p>
+				<p><input type="radio" name="2" disabled> <input type="text" name="answer1"> </p>
+				<p><input type="radio" name="3" disabled> <input type="text" name="answer1"> </p>
+				<p><input type="radio" name="4" disabled> <input type="text" name="answer1"> </p>
+			</div>
+			<button name="add question" type="button" onclick="addNewQuestion()">Add</button>
+		</div>
+		<div class="question" id="question2">
+			<div class="question-header">
+				<div class="question-title">
+					<p>Question:</p><p><input type="text" name="question"> </p>
+				</div>
+				<select name="question-type">
+					<option disabled >Choose the question type</option>
+					<option value="1" selected>One from many</option>
+					<option value="2">Many from many</option>
+					<option value="3">Text</option>
+				</select>
+				<select name="number-of-answer">
+					<option disabled>Answers Number</option>
+					<option value="1">One</option>
+					<option value="2">Two</option>
+					<option value="3">Three</option>
+					<option value="4" selected>Four</option>
+					<option value="5">Five</option>
+					<option value="6">Six</option>
+				</select>
+			</div>
+			<div class="question-answers">
+				<p>Answers:</p>	
+				<p><input type="radio" name="1" disabled> <input type="text" name="answer1"> </p>
+				<p><input type="radio" name="2" disabled> <input type="text" name="answer1"> </p>
+				<p><input type="radio" name="3" disabled> <input type="text" name="answer1"> </p>
+				<p><input type="radio" name="4" disabled> <input type="text" name="answer1"> </p>
+			</div>
+			<button name="add question" type="button" onclick="addNewQuestion()">Add</button>
+		</div>
+	</div>
+	<button type="submit" name="submit">Submit</button>
+</form>
+</div>
+</body>
+</html>

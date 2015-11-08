@@ -15,5 +15,12 @@ public interface Constants {
     String ANSWERS = "answers";
     String NUMBER = "number";
     String WEIGHT = "weight";
+    String TOKEN = "token";
+
+    //codes for signup
+    String OK="200";
+    String BAD_LOGIn="205";
+    String BAD_EMAIL="210";
+    String RESULT="result";
 
 }
