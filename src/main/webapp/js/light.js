@@ -3,10 +3,14 @@
 var jsTest;
 
 function loadTests() {
-	$.getJSON("rest/tests", function (json) {
-		$("#testsTable tbody").append(printTests(json));
-		$("#testsTable").trigger("update");
-		//$("#testsTable:last-child").append(printTests(json)); //Still don't know what's the best way
+	$.ajax({
+		dataType: "json",
+		url: "rest/tests",
+		headers: {"TOKEN": window.authToken},
+		success: function (json) {
+			$("#testsTable tbody").append(printTests(json));
+			$("#testsTable").trigger("update");
+		}
 	});
 }
 
@@ -19,10 +23,15 @@ function printTests(arg) {
 }
 
 function loadQuestions() {
-	$.getJSON("rest/tests/test?id=" + getParamValue('id'), function (json) {
-		jsTest = json;
-		$("#questionsPanel").append(printQuestions(json));
-		printDescription(json);
+	$.ajax({
+		dataType: "json",
+		url: "rest/tests/test?id=" + getParamValue('id'),
+		headers: {"TOKEN": window.authToken},
+		success: function (json) {
+			jsTest = json;
+			$("#questionsPanel").append(printQuestions(json));
+			printDescription(json);
+		}
 	});
 }
 
@@ -51,6 +60,7 @@ function sendTestAnswers() {
 			type: 'POST',
 			data: JSON.stringify(data),
 			contentType: 'application/json; charset=utf-8',
+			headers: {"TOKEN": window.authToken},
 			async: false,
 			success: function (response) {
 			}
@@ -72,19 +82,6 @@ function populateData() {
 		answersTest.questions[i].answer = $(radioName).val();
 	}
 	return answersTest;
-}
-
-function auth(username, hash) {
-	$.ajax({
-		url: 'rest/tests/passed_test',
-		type: "POST",
-		data: JSON.stringify({"userName": username, "passHash": hash}),
-		contentType: 'application/json; charset=utf-8',
-		async: false,
-		success: function () {
-			window.location.href = 'choose_test.html';
-		}
-	});
 }
 
 function checkRadios() {
@@ -127,6 +124,40 @@ function validatePassword() {
 		$("#passHelp").html("Enter a password!");
 		return false;
 	}
+}
+
+function auth(username, hash) {
+	$.ajax({
+		url: 'rest/auth/login',
+		type: "POST",
+		data: JSON.stringify({"userName": username, "passHash": hash}),
+		dataType: "json",
+		contentType: 'application/json; charset=utf-8',
+		async: false,
+		success: function (response) {
+			document.cookie = "authToken=" + response.token;
+			window.location.href = 'choose_test.html';
+		}
+	});
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') c = c.substring(1);
+		if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+	}
+	return;
+}
+
+function init() {
+	var token = getCookie("authToken");
+	if (token != undefined)
+		window.authToken = token;
+	if (window.authToken == undefined)
+		window.location.href = 'index.html';
 }
 
 function logIn() {
