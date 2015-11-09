@@ -25,8 +25,8 @@ public interface Constants {
     String WRONG_PASSWORD="250";
     String WRONG_LOGIN="255";
 
-    String LOGIN = "login";
-    String PASSWORD = "password";
+    String LOGIN = "userName";
+    String PASSWORD = "passHash";
     String EMAIL = "email";
 
     String RESULT="result";

@@ -64,6 +64,16 @@ public class PassTest implements Constants{
         return null;
     }
 
+    @POST
+    @Path("/created_test")
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String createdTest(String body)
+    {
+        log.info("get test:\n"+body);
+        return OK;
+    }
+
+
 
 
     private JSONObject testToJson(Test test)

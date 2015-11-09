@@ -10,7 +10,9 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
-import java.util.Random;
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 /**
  * Created by Smile on 08.11.15.
@@ -19,13 +21,22 @@ import java.util.Random;
 public class AuthorizeAndRegister implements Constants {
 
     DBControllerMethods dbController = new DBContorller();
-
+    private static Logger log;
+    static {
+        try {
+            log =  Logger.getLogger(AuthorizeAndRegister.class.getName());
+            log.addHandler(new FileHandler("log.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public String logIn(String body)
     {
+        log.info(body);
         JSONObject jsonBody = (JSONObject) JSONValue.parse(body);
         String login = (String) jsonBody.get(LOGIN);
         String password = (String) jsonBody.get(PASSWORD);
@@ -39,6 +50,7 @@ public class AuthorizeAndRegister implements Constants {
             char[] arr = login.toCharArray();
             response.put(TOKEN, generateToken(arr));
         }
+
         return response.toString();
     }
 
@@ -58,6 +70,7 @@ public class AuthorizeAndRegister implements Constants {
     @Consumes(MediaType.APPLICATION_JSON)
     public String signUp(String body)
     {
+        log.info(body);
         JSONObject response = new JSONObject();
         JSONObject jsonBody = (JSONObject) JSONValue.parse(body);
         String email = (String) jsonBody.get(EMAIL);
@@ -80,6 +93,19 @@ public class AuthorizeAndRegister implements Constants {
 
         return response.toString();
     }
-
+    
+    @POST
+    @Path("/anonymous")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String anonymousLogIn(String body)
+    {
+        JSONObject request = (JSONObject) JSONValue.parse(body);
+        String anonymous = (String) request.get(LOGIN);
+        JSONObject response = new JSONObject();
+        response.put(TOKEN, generateToken(anonymous.toCharArray()));
+        return response.toString();
+    }
+    
+    
 
 }

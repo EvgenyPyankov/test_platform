@@ -3,10 +3,21 @@
 <head>
 	<title>Create test</title>
 	<script src="js/create_test.js"></script>
+	<script src="js/jquery-2.1.4.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/light.js"></script>
+	<script src="js/jquery.tablesorter.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<style type="text/css">
+		body {
+    		margin:50px 0px; padding:0px;
+    		text-align:center;
+    	}
+    </style>
 </head>
 <body>
 <div>
-<form >
+<form method="POST" action="rest/tests/created_test" id="form">
 	<div class="form-header">
 		<p>Title:</p> <input type="text" name="title">
 		<p>Description:</p><textarea name="description"></textarea>
@@ -17,13 +28,13 @@
 				<div class="question-title">
 					<p>Question:</p><p><input type="text" name="question"> </p>
 				</div>
-				<select name="question-type">
+				<select name="question-type" onchange="choosedType(this)">
 					<option disabled >Choose the question type</option>
 					<option value="1" selected>One from many</option>
 					<option value="2">Many from many</option>
 					<option value="3">Text</option>
 				</select>
-				<select name="number-of-answer">
+				<select name="number-of-answer" onchange="choosedNumberOfAnswers(this)">
 					<option disabled>Answers Number</option>
 					<option value="1">One</option>
 					<option value="2">Two</option>
@@ -33,17 +44,17 @@
 					<option value="6">Six</option>
 				</select>
 			</div>
+			<p>Answers:</p>	
 			<div class="question-answers">
-				<p>Answers:</p>	
 				<p><input type="radio" name="1" disabled> <input type="text" name="answer1"> </p>
 				<p><input type="radio" name="2" disabled> <input type="text" name="answer1"> </p>
 				<p><input type="radio" name="3" disabled> <input type="text" name="answer1"> </p>
 				<p><input type="radio" name="4" disabled> <input type="text" name="answer1"> </p>
 			</div>
-			<button name="add question" type="button" onclick="addNewQuestion()">Add</button>
+			<button name="add question" type="button" onclick="addNewQuestion(this)">Add</button>
 		</div>
 	</div>
-	<button type="submit" name="submit">Submit</button>
+	<button type="submit" name="submit" onclick="submitForm()">Submit</button>
 </form>
 </div>
 </body>
