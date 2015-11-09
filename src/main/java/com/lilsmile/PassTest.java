@@ -3,6 +3,7 @@ package com.lilsmile;
 import bd.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -58,6 +59,15 @@ public class PassTest implements Constants{
     @Consumes(MediaType.APPLICATION_JSON)
     public String passedTest(String body)
     {
+        JSONObject jsonObject = (JSONObject) JSONValue.parse(body);
+        String token = (String) jsonObject.get(TOKEN);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i<token.length(); i+=2)
+        {
+            sb.append(token.charAt(i));
+        }
+        String login = sb.toString();
+        //todo : add adding to bd
         log.info("get body:\n"+body);
         Mail mail = new Mail();
         mail.sendEmail(body);
@@ -69,6 +79,7 @@ public class PassTest implements Constants{
     @Consumes(MediaType.TEXT_PLAIN)
     public String createdTest(String body)
     {
+        //todo : add adding to bd
         log.info("get test:\n"+body);
         return OK;
     }

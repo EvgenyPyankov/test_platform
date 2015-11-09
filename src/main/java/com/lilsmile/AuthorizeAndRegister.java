@@ -3,6 +3,7 @@ package com.lilsmile;
 import bd.DBContorller;
 import bd.DBControllerMethods;
 import bd.User;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -11,6 +12,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
@@ -41,27 +43,35 @@ public class AuthorizeAndRegister implements Constants {
         String login = (String) jsonBody.get(LOGIN);
         String password = (String) jsonBody.get(PASSWORD);
         JSONObject response = new JSONObject();
-        if (dbController.getUserByEmail(login).equals(null) || dbController.getUserByLogin(login).equals(null))
+        User currentUser = dbController.getUserByEmail(login);
+        if (currentUser.equals(null))
         {
-            response.put(RESULT, WRONG_LOGIN);
-        } else
-        {
-            //todo: add passwd check
-            char[] arr = login.toCharArray();
-            response.put(TOKEN, generateToken(arr));
+            currentUser = dbController.getUserByLogin(login);
+            if (currentUser.equals(null))
+            {
+                response.put(RESULT, WRONG_LOGIN);
+                return response.toString();
+            }
         }
+        response.put(TOKEN, generateToken(currentUser.getLogin()));
 
         return response.toString();
     }
 
-    private String generateToken(char[] arr)
+    private String generateToken(String login)
     {
+        Random random = new Random(Integer.MAX_VALUE);
+        int root = random.nextInt(Integer.MAX_VALUE);
+        String salt = DigestUtils.md5Hex(String.valueOf(root));
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i<arr.length; i++)
+        for (int i = 0; i<login.length(); i++)
         {
-            sb.append((char)(arr[i]+i*2));
+            sb.append(salt.charAt(i));
+            sb.append(login.charAt(i));
         }
-        return sb.toString();
+        String token = sb.toString();
+        log.info("token: "+token);
+        return token;
     }
 
 
@@ -81,7 +91,7 @@ public class AuthorizeAndRegister implements Constants {
             if (dbController.getUserByEmail(email).equals(null))
             {
                 dbController.addUser(new User(login, email, password.hashCode()));
-                response.put(TOKEN, generateToken(login.toCharArray()));
+                response.put(TOKEN, generateToken(login));
             } else
             {
                 response.put(RESULT, BAD_EMAIL);
@@ -102,7 +112,7 @@ public class AuthorizeAndRegister implements Constants {
         JSONObject request = (JSONObject) JSONValue.parse(body);
         String anonymous = (String) request.get(LOGIN);
         JSONObject response = new JSONObject();
-        response.put(TOKEN, generateToken(anonymous.toCharArray()));
+        response.put(TOKEN, generateToken(anonymous));
         return response.toString();
     }
     
