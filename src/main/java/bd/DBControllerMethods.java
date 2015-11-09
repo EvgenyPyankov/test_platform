@@ -4,11 +4,17 @@ import java.util.ArrayList;
 
 public interface DBControllerMethods {
     //put methods you need here
+
+    //tests
     Test getTestById(int id);
     ArrayList<Test> getTests();
-    public void addUser(User user);
-    public User getUserByLogin(String login);
-    public User getUserByEmail(String email);
+    void addTest(Test test);
+
+
+    //users
+    void addUser(User user);
+    User getUserByLogin(String login);
+    User getUserByEmail(String email);
 
 
 }
