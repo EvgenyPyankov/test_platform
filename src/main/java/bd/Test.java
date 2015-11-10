@@ -80,4 +80,16 @@ public class Test {
     }
 
 
+    @Override
+    public String toString() {
+        return "Test{" +
+                "idTest=" + idTest +
+                ", author='" + author + '\'' +
+                ", testCategory='" + testCategory + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", date=" + date +
+                ", questions=" + questions +
+                '}';
+    }
 }

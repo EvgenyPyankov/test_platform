@@ -34,4 +34,13 @@ public class Answer {
     public void setWeight(int weight) {
         this.weight = weight;
     }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "number=" + number +
+                ", title='" + title + '\'' +
+                ", weight=" + weight +
+                '}';
+    }
 }
