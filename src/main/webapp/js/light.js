@@ -105,19 +105,30 @@ function getParamValue(name) {
 }
 
 function validateEmail() {
-	var regx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
-	if (regx.test($('#inputEmail').val())) {
+	var regexp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
+	if (regexp.test($('#inputEmail').val())) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+function validateLogin() {
+	var regx = /^[a-zA-Z0-9_]+$/i;
+	if (regx.test($('#inputEmail').val()) || validateEmail()) {
 		$("#emailHelp").html("");
 		return true;
 	}
 	else {
-		$("#emailHelp").html("Enter a valid email!");
+		$("#emailHelp").html("Enter a valid login or email!");
 		return false;
 	}
 }
 
 function validatePassword() {
-	if ($('#inputPassword').val().length != 0) {
+	var regx = /^[a-zA-Z0-9_]+$/i;
+	if ($('#inputPassword').val().length != 0 && regx.test($('#inputPassword').val())) {
 		return true;
 	}
 	else {
@@ -161,9 +172,24 @@ function init() {
 }
 
 function logIn() {
-	if (validateEmail() && validatePassword()) {
+	if (validateLogin() && validatePassword()) {
 		auth($("#inputEmail").val(), $("#inputPassword").val());
 	}
+}
+
+function logInGuest() {
+	$.ajax({
+		url: 'rest/auth/anonymous',
+		type: "POST",
+		data: JSON.stringify({"userName": "anonymous"}),
+		dataType: "json",
+		contentType: 'application/json; charset=utf-8',
+		async: true,
+		success: function (response) {
+			document.cookie = "authToken=" + response.token;
+			window.location.href = 'choose_test.html';
+		}
+	});
 }
 
 function signUp() {
