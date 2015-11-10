@@ -16,6 +16,7 @@ public interface Constants {
     String NUMBER = "number";
     String WEIGHT = "weight";
     String TOKEN = "token";
+    String TYPE = "type";
 
     //codes for signup
     String OK="200";

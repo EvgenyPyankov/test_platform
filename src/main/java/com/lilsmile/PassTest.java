@@ -7,6 +7,7 @@ import org.json.simple.JSONValue;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +40,7 @@ public class PassTest implements Constants{
         JSONArray jsonArray = new JSONArray();
         for (Test test : tests)
         {
-            jsonArray.add(testToJson(test));
+            jsonArray.add(testToJSON(test));
         }
         log.info("Send all tests");
         return jsonArray.toString();
@@ -51,7 +52,7 @@ public class PassTest implements Constants{
     public String getTestById(@QueryParam("id") String idString)
     {
         log.info("Send test #"+idString);
-        return testToJson(dbController.getTestById(Integer.valueOf(idString).intValue())).toString();
+        return testToJSON(dbController.getTestById(Integer.valueOf(idString).intValue())).toString();
     }
 
     @POST
@@ -76,7 +77,7 @@ public class PassTest implements Constants{
 
     @POST
     @Path("/created_test")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     public String createdTest(String body)
     {
         //todo : add adding to bd
@@ -87,7 +88,7 @@ public class PassTest implements Constants{
 
 
 
-    private JSONObject testToJson(Test test)
+    private JSONObject testToJSON(Test test)
     {
         JSONObject currentTest = new JSONObject();
         currentTest.put(TEST_ID,test.getIdTest());
@@ -135,6 +136,23 @@ public class PassTest implements Constants{
         currentTest.put(QUESTIONS, jsonArrayQuestions);
         return currentTest;
     }
+
+    private Test jsonToTest(JSONObject jsonTest)
+    {
+        String title = (String) jsonTest.get(TITLE);
+        String desctiption = (String) jsonTest.get(DESCRIPTION);
+        JSONArray questionArr = (JSONArray) jsonTest.get(QUESTIONS);
+        for (int i = 0; i<questionArr.size(); i++)
+        {
+            JSONObject currentQuestion = (JSONObject) questionArr.get(i);
+            String questionTitle = (String) currentQuestion.get(TITLE);
+            String type = (String) currentQuestion.get(TYPE);
+            String number = (String) currentQuestion.get(NUMBER);
+            
+        }
+        return null;
+    }
+
 
 
 }

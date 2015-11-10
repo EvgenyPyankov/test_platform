@@ -28,13 +28,13 @@
 				<div class="question-title">
 					<p>Question:</p><p><input type="text" name="question"> </p>
 				</div>
-				<select name="question-type" onchange="choosedType(this)">
+				<select class="question-type" name="question-type" onchange="choosedType(this)">
 					<option disabled >Choose the question type</option>
 					<option value="1" selected>One from many</option>
 					<option value="2">Many from many</option>
 					<option value="3">Text</option>
 				</select>
-				<select name="number-of-answer" onchange="choosedNumberOfAnswers(this)">
+				<select class="number-of-answer" name="number-of-answer" onchange="choosedNumberOfAnswers(this)">
 					<option disabled>Answers Number</option>
 					<option value="1">One</option>
 					<option value="2">Two</option>
@@ -46,10 +46,10 @@
 			</div>
 			<p>Answers:</p>	
 			<div class="question-answers">
-				<p><input type="radio" name="1" disabled> <input type="text" name="answer1"> </p>
-				<p><input type="radio" name="2" disabled> <input type="text" name="answer1"> </p>
-				<p><input type="radio" name="3" disabled> <input type="text" name="answer1"> </p>
-				<p><input type="radio" name="4" disabled> <input type="text" name="answer1"> </p>
+				<p><input type="radio" name="1" disabled> <input type="text" name="answer"> Weight:<input type="text" name="weight" size="5"> </p>
+				<p><input type="radio" name="2" disabled> <input type="text" name="answer"> Weight:<input type="text" name="weight" size="5"> </p>
+				<p><input type="radio" name="3" disabled> <input type="text" name="answer"> Weight:<input type="text" name="weight" size="5"> </p>
+				<p><input type="radio" name="4" disabled> <input type="text" name="answer"> Weight:<input type="text" name="weight" size="5"> </p>
 			</div>
 			<button name="add question" type="button" onclick="addNewQuestion(this)">Add</button>
 		</div>

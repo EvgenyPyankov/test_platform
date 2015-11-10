@@ -1,12 +1,5 @@
 var numberOfQuestionsOnThePage = 1;
 
-function chooseQuestionType(numberOfQuestion, arg)
-{
-	var question = document.getElementById('question'+numberOfQuestion);
-	alert(question.innerHTML);
-}
-
-
 function addNewQuestion(element)
 {
 	numberOfQuestionsOnThePage++;
@@ -64,7 +57,7 @@ function choosedNumberOfAnswers(element)
 	for (var i = 0; i<value; i++)
 	{
 		var newP = document.createElement('p');
-		newP.innerHTML='<input type="'+type+'" name="'+(i+1)+'" disabled> <input type="text" name="answer'+(i+1)+'">';
+		newP.innerHTML='<input type="'+type+'" name="'+(i+1)+'" disabled> <input type="text" name="answer'+(i+1)+'">'+'Weight:<input type="text" name="weight'+(i+1)+'" size="5">';
 		answersDiv.appendChild(newP);
 	}
 }
@@ -90,7 +83,7 @@ function choosedType(element)
 		for (var i = 0; i<count; i++)
 		{
 			var newP = document.createElement('p');
-			newP.innerHTML='<input type="radio" name="'+(i+1)+'" disabled> <input type="text" name="answer'+(i+1)+'">';
+			newP.innerHTML='<input type="radio" name="'+(i+1)+'" disabled> <input type="text" name="answer'+(i+1)+'">'+'Weight:<input type="text" name="weight'+(i+1)+'" size="5">';
 			answersDiv.appendChild(newP);
 		}
 	} else if (value==2)
@@ -99,14 +92,14 @@ function choosedType(element)
 		for (var i = 0; i<count; i++)
 		{
 			var newP = document.createElement('p');
-			newP.innerHTML='<input type="checkbox" name="'+(i+1)+'" disabled> <input type="text" name="answer'+(i+1)+'">';
+			newP.innerHTML='<input type="checkbox" name="'+(i+1)+'" disabled> <input type="text" name="answer'+(i+1)+'">'+'Weight:<input type="text" name="weight'+(i+1)+'" size="5">';
 			answersDiv.appendChild(newP);
 		}
 	} else 
 	{
 		numberOfAnswers.disabled=true;
 		var newP = document.createElement('p');
-		newP.innerHTML='<input type="text" name="answer'+(i+1)+'">';
+		newP.innerHTML='<input type="text" name="answer'+(i+1)+'">'+'Weight:<input type="text" name="weight'+(i+1)+'" size="5">';
 		answersDiv.appendChild(newP);
 	}
 }
@@ -118,12 +111,64 @@ function submitForm()
 		e.preventDefault();
 		var m_method=$(this).attr('method');
 		var m_action=$(this).attr('action');
-		var m_data=$(this).serialize();
-		alert(m_data);
+		//var m_data=$(this).serialize();
+		//m_data= JSON.stringify(m_data);
+		//alert(m_data);
+
+		var data = {
+			title:document.getElementsByName('title')[0].value,
+			description:document.getElementsByName('description')[0].value,
+			questions:new Array()
+			};
+
+		var questions = document.getElementsByClassName('question');
+		for (var i = 0; i<questions.length; i++)
+		{
+			var questionTitle = questions[i].getElementsByClassName('question-title')[0].querySelectorAll('input')[0].value;
+			var questionType = questions[i].getElementsByClassName('question-type')[0].value;
+			var numberOfAnswers = questions[i].getElementsByClassName('number-of-answer')[0].value;
+			var answers = questions[i].getElementsByClassName('question-answers')[0].querySelectorAll('input');
+			//console.log(questionTitle+" "+questionType+" "+numberOfAnswers);
+			var stringAnswers = new Array();
+			var stringAnswersNumber=0;
+			var oneAnswer = {
+					title:'',
+					weight:0
+				};
+			for (var j = 0; j<answers.length; j++)
+			{
+				if (answers[j].name=='answer')
+				{
+					oneAnswer.title=answers[j].value;
+					//console.log(stringAnswers[j]);
+				}
+				if (answers[j].name=='weight')
+				{
+					oneAnswer.weight=answers[j].value;
+					//console.log(stringAnswers[j]);
+					stringAnswers[stringAnswersNumber]=oneAnswer;
+					stringAnswersNumber++;
+				}
+			}
+			var damnCurentQuestion = {
+				title:questionTitle,
+				type:questionType,
+				number:numberOfAnswers,
+				answersArr:stringAnswers
+			}
+
+			data.questions[i]=damnCurentQuestion;
+		}
+		data = JSON.stringify(data);
+		alert(data);
+		//console.log(data.title+"  " + data.description);
 		$.ajax({
 			type: m_method,
 			url: m_action,
-			data: m_data,
+			data: data,
+			contentType: 'application/json; charset=utf-8',
+			headers: {"TOKEN": window.authToken},
+			async: false,
 			success: function(){
 				window.location.href = 'choose_test.html';
 			}
