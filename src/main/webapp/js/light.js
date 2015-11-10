@@ -6,7 +6,7 @@ function loadTests() {
 	$.ajax({
 		dataType: "json",
 		url: "rest/tests",
-		headers: {"TOKEN": window.authToken},
+		data: {"token": window.authToken},
 		success: function (json) {
 			$("#testsTable tbody").append(printTests(json));
 			$("#testsTable").trigger("update");
@@ -26,7 +26,7 @@ function loadQuestions() {
 	$.ajax({
 		dataType: "json",
 		url: "rest/tests/test?id=" + getParamValue('id'),
-		headers: {"TOKEN": window.authToken},
+		data: {"token": window.authToken},
 		success: function (json) {
 			jsTest = json;
 			$("#questionsPanel").append(printQuestions(json));
@@ -73,6 +73,7 @@ function sendTestAnswers() {
 function populateData() {
 	var answersTest = new Object();
 	answersTest.test_id = jsTest.test_id;
+	answersTest.token=window.authToken;
 	answersTest.questions = [];
 	var radioName = "";
 	for (var i = 0; i < $(".panel-body").length; i++) {
