@@ -147,8 +147,12 @@ function auth(username, hash) {
 		contentType: 'application/json; charset=utf-8',
 		async: false,
 		success: function (response) {
-			document.cookie = "authToken=" + response.token;
-			window.location.href = 'choose_test.html';
+			if (response.result==255) {
+				$("#emailHelp").html("Wrong login or email!");
+			} else if (typeof response.token != 'undefined') {
+				document.cookie = "authToken=" + response.token;
+				window.location.href = 'choose_test.html';
+			}
 		}
 	});
 }
