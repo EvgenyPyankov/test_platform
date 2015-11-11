@@ -5,54 +5,82 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/light.css">
 	<script src="js/jquery-2.1.4.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/light.js"></script>
 </head>
 
 <body>
-
 <div class="container col-md-6 col-md-offset-3">
 
-	<ul class="nav nav-tabs nav-justified" style="margin-top:200px">
+	<ul class="nav nav-tabs nav-justified" id="navTabs">
 		<li class="active"><a data-toggle="tab" href="#logtab">Log In</a></li>
 		<li><a data-toggle="tab" href="#regtab">Sign Up</a></li>
 	</ul>
 
 	<div class="tab-content ">
 		<div id="logtab" class="tab-pane fade in active">
+			<form class="form-signin has-feedback" id="loginForm">
+				<h2 class="form-signin-heading">Please, sign in:</h2>
 
-			<form class="form-signin" id="loginForm" style="width:70%; margin:0 auto">
-				<h2 class="form-signin-heading">Please sign in</h2>
-				<label for="inputEmail" class="sr-only">Username or Email</label>
-				<input type="email" id="inputEmail" class="form-control" placeholder="Username or e-mail"
-					   autofocus required>
-				<span id="emailHelp"></span>
-				<label for="inputPassword" class="sr-only">Password</label>
-				<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-				<span id="passHelp"></span>
-
+				<div id="emailVal">
+					<label for="inputEmail" class="sr-only">Username or Email</label>
+					<input type="email" id="inputEmail" class="form-control" placeholder="Username or e-mail"
+						   autofocus required>
+					<span id="emailHelp"></span>
+				</div>
+				<div id="passVal">
+					<label for="inputPassword" class="sr-only">Password</label>
+					<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+					<span id="passHelp"></span>
+				</div>
 				<div class="checkbox">
 					<label>
 						<input type="checkbox" value="remember-me"> Remember me
 					</label>
 				</div>
-				<button class="btn btn-lg btn-primary btn-block" id="loginBtn" type="button" onclick="logIn()">Log In</button>
-				<button class="btn btn-warning btn-lg btn-block" id="loginGuest" type="button" onclick="logInGuest()">Log in as a Guest</button>
+				<button class="btn btn-lg btn-primary btn-block" id="loginBtn" type="button" onclick="logIn()">Log In
+				</button>
+				<button class="btn btn-warning btn-lg btn-block btn-bottom" id="loginGuest" type="button"
+						onclick="logInGuest()">Log in as a Guest
+				</button>
 			</form>
-
 		</div>
+
 		<div id="regtab" class="tab-pane fade">
-			<form class="form-signin" id="regForm" style="width:70%; margin:0 auto">
+			<form class="form-signin has-feedback" id="regForm">
 				<h2 class="form-signin-heading">Create a new account:</h2>
-				<label for="inputEmail" class="sr-only">Email address</label>
-				<span id="emailHelpReg">Enter your email:</span>
-				<input type="email" id="inputEmailReg" class="form-control" placeholder="Username or e-mail"
-					   autofocus required>
-				<label for="inputPassword" class="sr-only">Password</label>
-				<span id="passHelpReg">Enter your password:</span>
-				<input type="password" id="inputPasswordReg" class="form-control" placeholder="Password" required>
-				<button class="btn btn-lg btn-primary btn-block" id="signupBtn" style="margin-top:20px" type="button" onclick="signUp()">Sign Up</button>
+
+				<div id="unregVal">
+					<label for="inputUsernameReg" class="sr-only">Username</label>
+					<span id="usernameHelpReg">Enter your username:</span>
+					<input type="email" id="inputUsernameReg" class="form-control" placeholder="Username or e-mail"
+						   autofocus required>
+				</div>
+
+				<div id="emailregVal">
+					<label for="inputEmailReg" class="sr-only">Email address</label>
+					<span id="emailHelpReg">Enter your email:</span>
+					<input type="email" id="inputEmailReg" class="form-control" placeholder="Username or e-mail"
+						   autofocus required>
+				</div>
+
+				<div id="passregVal">
+					<label for="inputPasswordReg" class="sr-only">Password</label>
+					<span id="passHelpReg">Enter your password:</span>
+					<input type="password" id="inputPasswordReg" class="form-control" placeholder="Password" required>
+
+					<label for="inputPasswordRegRepeat" class="sr-only">Repeat Password</label>
+					<span id="passHelpRegRepeat">Repeat your password:</span>
+					<input type="password" id="inputPasswordRegRepeat" class="form-control" placeholder="Password"
+						   required>
+				</div>
+				<span id="regErrors"></span>
+				<button class="btn btn-lg btn-primary btn-block btn-bottom" id="signupBtn" type="button"
+						onclick="signUp()">Sign Up
+				</button>
+
 			</form>
 		</div>
 	</div>

@@ -73,7 +73,7 @@ function sendTestAnswers() {
 function populateData() {
 	var answersTest = new Object();
 	answersTest.test_id = jsTest.test_id;
-	answersTest.token=window.authToken;
+	answersTest.token = window.authToken;
 	answersTest.questions = [];
 	var radioName = "";
 	for (var i = 0; i < $(".panel-body").length; i++) {
@@ -119,10 +119,12 @@ function validateLogin() {
 	var regx = /^[a-zA-Z0-9_]+$/i;
 	if (regx.test($('#inputEmail').val()) || validateEmail()) {
 		$("#emailHelp").html("");
+		$('#emailVal').removeClass("has-error");
 		return true;
 	}
 	else {
 		$("#emailHelp").html("Enter a valid login or email!");
+		$('#emailVal').addClass("has-error");
 		return false;
 	}
 }
@@ -130,12 +132,40 @@ function validateLogin() {
 function validatePassword() {
 	var regx = /^[a-zA-Z0-9_]+$/i;
 	if ($('#inputPassword').val().length != 0 && regx.test($('#inputPassword').val())) {
+		$("#passHelp").html("");
+		$('#passVal').removeClass("has-error");
 		return true;
 	}
 	else {
 		$("#passHelp").html("Enter a password!");
+		$('#passVal').addClass("has-error");
 		return false;
 	}
+}
+
+function validateReg() {
+	var regx = /^[a-zA-Z0-9_]+$/i;
+	var regexp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
+
+	if (!regx.test($('#inputUsernameReg').val())) {
+		$('#unregVal').addClass("has-error");
+		return false;
+	} else {
+		$('#unregVal').removeClass("has-error")
+	}
+	if (!regexp.test($('#inputEmailReg').val())) {
+		$('#emailregVal').addClass("has-error");
+		return false;
+	} else {
+		$('#emailregVal').removeClass("has-error")
+	}
+	if (!regx.test($('#inputPasswordReg').val()) || !regx.test($('#inputPasswordRegRepeat').val()) || !($('#inputPasswordReg').val() == $('#inputPasswordRegRepeat').val())) {
+		$('#passregVal').addClass("has-error");
+		return false;
+	} else {
+		$('#passregVal').removeClass("has-error")
+	}
+	return true;
 }
 
 function auth(username, hash) {
@@ -147,8 +177,9 @@ function auth(username, hash) {
 		contentType: 'application/json; charset=utf-8',
 		async: false,
 		success: function (response) {
-			if (response.result==255) {
+			if (response.result == 255) {
 				$("#emailHelp").html("Wrong login or email!");
+				$('#emailVal').addClass("has-error");
 			} else if (typeof response.token != 'undefined') {
 				document.cookie = "authToken=" + response.token;
 				window.location.href = 'choose_test.html';
@@ -198,6 +229,26 @@ function logInGuest() {
 }
 
 function signUp() {
-
+	if (validateReg()) {
+		$.ajax({
+			url: 'rest/auth/signup',
+			type: "POST",
+			data: JSON.stringify({"userName": $("#inputUsernameReg").val(), "passHash": $("#inputPasswordReg").val(), "email": $("#inputEmailReg").val()}),
+			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
+			async: true,
+			success: function (response) {
+				if (response.result == 205) {
+					$('#unregVal').addClass("has-error");
+					$("#regErrors").html("Username already in use!");
+				} else if (response.result == 210) {
+					$("#regErrors").html("Email already in use!");
+					$('#emailregVal').addClass("has-error");
+				} else if (response.result == 200) {
+					$("#regErrors").html("Registration complete!");
+				}
+			}
+		});
+	}
 }
 

@@ -87,10 +87,11 @@ public class AuthorizeAndRegister implements Constants {
         String email = (String) jsonBody.get(EMAIL);
         String login = (String) jsonBody.get(LOGIN);
         String password = (String) jsonBody.get(PASSWORD);
-        if (dbController.getUserByLogin(login).equals(null)) {
-            if (dbController.getUserByEmail(email).equals(null)) {
+        if (dbController.getUserByLogin(login) == null) {
+            if (dbController.getUserByEmail(email) == null) {
                 dbController.addUser(new User(login, email, password.hashCode()));
-                response.put(TOKEN, generateToken(login));
+                response.put(RESULT, OK);
+                //response.put(TOKEN, generateToken(login)); //we said that signup should return OK code, not a token
             } else {
                 response.put(RESULT, BAD_EMAIL);
             }

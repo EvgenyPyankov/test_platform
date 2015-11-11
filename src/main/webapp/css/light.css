@@ -1,0 +1,22 @@
+/* Moved style elements here from basic structure */
+
+.btn-bottom {
+    margin-bottom: 50px;
+}
+#loginForm, #regForm {
+    width:70%;
+    margin:0 auto;
+}
+#signupBtn {
+    margin-top:20px;
+}
+#navTabs {
+    margin-top:100px;
+}
+#regtab input {
+    margin-bottom:10px;
+}
+#logtab input {
+    margin-bottom:10px;
+}
+
