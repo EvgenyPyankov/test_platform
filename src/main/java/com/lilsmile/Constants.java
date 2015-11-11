@@ -17,6 +17,7 @@ public interface Constants {
     String WEIGHT = "weight";
     String TOKEN = "token";
     String TYPE = "type";
+    String ANSWERS_ARR="answersArr";
 
     //codes for signup
     String OK="200";
@@ -32,6 +33,7 @@ public interface Constants {
 
     String RESULT="result";
 
-
+    //errors
+    String SMTH_IS_WRONG = "100";
 
 }

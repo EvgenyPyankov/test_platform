@@ -7,7 +7,7 @@ import org.json.simple.JSONValue;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.StreamingOutput;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,7 +81,20 @@ public class PassTest implements Constants{
     public String createdTest(String body)
     {
         //todo : add adding to bd
-        log.info("get test:\n"+body);
+        try {
+            dbController.addTest(jsonToTest((JSONObject) JSONValue.parse(body)));
+            log.info("get test all right:\n" + body);
+        } catch (Exception e)
+        {
+            StackTraceElement[] stackTraceElements = e.getStackTrace();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i<stackTraceElements.length; i++)
+            {
+                sb.append(stackTraceElements[i].toString()+"\n");
+            }
+            log.info(sb.toString());
+            return SMTH_IS_WRONG;
+        }
         return OK;
     }
 
@@ -142,15 +155,28 @@ public class PassTest implements Constants{
         String title = (String) jsonTest.get(TITLE);
         String desctiption = (String) jsonTest.get(DESCRIPTION);
         JSONArray questionArr = (JSONArray) jsonTest.get(QUESTIONS);
+        ArrayList<Question> questions = new ArrayList<Question>();
         for (int i = 0; i<questionArr.size(); i++)
         {
-            JSONObject currentQuestion = (JSONObject) questionArr.get(i);
-            String questionTitle = (String) currentQuestion.get(TITLE);
-            String type = (String) currentQuestion.get(TYPE);
-            String number = (String) currentQuestion.get(NUMBER);
-            
+            JSONObject currentQuestionJSON = (JSONObject) questionArr.get(i);
+            String questionTitle = (String) currentQuestionJSON.get(TITLE);
+            String type = (String) currentQuestionJSON.get(TYPE);
+            String number = (String) currentQuestionJSON.get(NUMBER);
+            JSONArray answersJSON = (JSONArray) currentQuestionJSON.get(ANSWERS_ARR);
+            ArrayList<Answer> answers = new ArrayList<Answer>();
+            for (int j = 0; j<answersJSON.size(); j++)
+            {
+                JSONObject currentAnswerJSON = (JSONObject) answersJSON.get(i);
+                String answerTitle = (String) currentAnswerJSON.get(TITLE);
+                String weight = (String) currentAnswerJSON.get(WEIGHT);
+                Answer currentAnswer = new Answer(j,answerTitle,Integer.valueOf(weight).intValue());
+                answers.add(currentAnswer);
+            }
+            Question currentQuestion = new Question(i,questionTitle,answers, Integer.valueOf(type).intValue());
+            questions.add(currentQuestion);
         }
-        return null;
+        Test test = new Test(100,"author","category",title,desctiption, new Date(System.currentTimeMillis()), questions);
+        return test;
     }
 
 

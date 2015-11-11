@@ -38,6 +38,7 @@ public class AuthorizeAndRegister implements Constants {
     @Consumes(MediaType.APPLICATION_JSON)
     public String logIn(String body)
     {
+        try{
         log.info(body);
         JSONObject jsonBody = (JSONObject) JSONValue.parse(body);
         String login = (String) jsonBody.get(LOGIN);
@@ -56,11 +57,17 @@ public class AuthorizeAndRegister implements Constants {
         response.put(TOKEN, generateToken(currentUser.getLogin()));
 
         return response.toString();
+        }catch (Exception e)
+        {
+            logException(e);
+            return null;
+        }
+
     }
 
     private String generateToken(String login)
     {
-        Random random = new Random(Integer.MAX_VALUE);
+        Random random = new Random(System.currentTimeMillis());
         int root = random.nextInt(Integer.MAX_VALUE);
         String salt = DigestUtils.md5Hex(String.valueOf(root));
         StringBuilder sb = new StringBuilder();
@@ -116,6 +123,16 @@ public class AuthorizeAndRegister implements Constants {
         return response.toString();
     }
     
-    
+    private void logException(Exception e)
+    {
+        StackTraceElement[] elements = e.getStackTrace();
+        StringBuilder sb = new StringBuilder();
+        for (StackTraceElement element : elements)
+        {
+            sb.append(element.toString()+"\n");
+        }
+        log.warning(sb.toString());
+    }
+
 
 }
