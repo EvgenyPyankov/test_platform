@@ -7,6 +7,7 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/light.js"></script>
 	<script src="js/jquery.tablesorter.js"></script>
+	<script>init();</script>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<style type="text/css">
 		body {
@@ -43,13 +44,18 @@
 					<option value="5">Five</option>
 					<option value="6">Six</option>
 				</select>
+				<select class="weight-or-not" name="weight-select" onchange="changeWeightFlag(this)">
+					<option disabled>Weight or not</option>
+					<option value="1">Weight</option>
+					<option value="2" selected>Non-weight</option> 
+				</select>
 			</div>
 			<p>Answers:</p>	
 			<div class="question-answers">
-				<p><input type="radio" name="1" disabled> <input type="text" name="answer"> Weight:<input type="text" name="weight" size="5"> </p>
-				<p><input type="radio" name="2" disabled> <input type="text" name="answer"> Weight:<input type="text" name="weight" size="5"> </p>
-				<p><input type="radio" name="3" disabled> <input type="text" name="answer"> Weight:<input type="text" name="weight" size="5"> </p>
-				<p><input type="radio" name="4" disabled> <input type="text" name="answer"> Weight:<input type="text" name="weight" size="5"> </p>
+				<p><input type="radio" name="type"> <input type="text" name="answer"> <span class="weightSpan" style="visibility: hidden;">Weight: <input type="text" name="weight" size="5"></span></p>
+				<p><input type="radio" name="type"> <input type="text" name="answer"> <span class="weightSpan" style="visibility: hidden;">Weight: <input type="text" name="weight" size="5"></span></p>
+				<p><input type="radio" name="type"> <input type="text" name="answer"> <span class="weightSpan" style="visibility: hidden;">Weight: <input type="text" name="weight" size="5"></span></p>
+				<p><input type="radio" name="type"> <input type="text" name="answer"> <span class="weightSpan" style="visibility: hidden;">Weight: <input type="text" name="weight" size="5"></span></p>
 			</div>
 			<button name="add question" type="button" onclick="addNewQuestion(this)">Add</button>
 		</div>

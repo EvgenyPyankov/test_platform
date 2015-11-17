@@ -17,9 +17,12 @@ function addNewQuestion(element)
 
 	var questionTypes = document.getElementsByName("question-type");
 	var numberOfAnswers = document.getElementsByName('number-of-answer');
+	var weightOrNot = document.getElementsByName('weight-select');
 	var n = parent.id.substring(parent.id.length-1)-1;
 	var type = questionTypes[n].value;
 	var number = numberOfAnswers[n].value;
+	var weight = weightOrNot[n].value;
+
 
 	var selects = question.getElementsByTagName('select');
 	for (var i = 0; i<selects.length; i++)
@@ -32,32 +35,64 @@ function addNewQuestion(element)
 		{
 			selects[i].value = number;
 		}
+		if (selects[i].name == 'weight-select')
+		{
+			selects[i].value = weight;
+		}
 	}
+}
+
+
+function changeWeightFlag(element)
+{
+	var question = element.parentNode.parentNode;
+	var spans = question.getElementsByClassName('weightSpan');
+	for (var i = 0; i<spans.length; i++)
+	{
+		if (spans[i].style.visibility=="hidden"){
+			spans[i].style.visibility="visible";
+		} else{
+			spans[i].style.visibility="hidden";
+		}
+	}
+
 }
 
 function choosedNumberOfAnswers(element)
 {
-	var value = element.value;
 	var currentQuestion = element.parentNode.parentNode;
 	var collectionAnswersDiv = currentQuestion.getElementsByClassName('question-answers');
 	var answersDiv=collectionAnswersDiv[0];
-	var type;
+	var questionType=currentQuestion.getElementsByClassName('question-type')[0].value;
+	var questionAnswers=currentQuestion.getElementsByClassName('number-of-answer')[0].value;
+	var questionWeight=currentQuestion.getElementsByClassName('weight-or-not')[0].value;
+	var type,number,weight;
+
+	if (questionType==1)
+	{
+		type='radio';
+	} else
+	{
+		type='checkbox';
+	}
+
+	number=questionAnswers;
+
+	if (questionWeight==1)
+	{
+		weight='visibility: visible;';
+	} else{
+		weight='visibility: hidden;';
+	}
+
 	while(answersDiv.firstChild)
 	{
-		var radioOrCheckbox = answersDiv.firstChild.firstChild;
-		if (radioOrCheckbox.type=='radio')
-		{
-			type='radio';
-		} else
-		{
-			type='checkbox';
-		}
 		answersDiv.removeChild(answersDiv.firstChild);
 	}
-	for (var i = 0; i<value; i++)
+	for (var i = 0; i<number; i++)
 	{
 		var newP = document.createElement('p');
-		newP.innerHTML='<input type="'+type+'" name="'+(i+1)+'" disabled> <input type="text" name="answer'+(i+1)+'">'+'Weight:<input type="text" name="weight'+(i+1)+'" size="5">';
+		newP.innerHTML='<input type="'+type+'" name="type"> <input type="text" name="answer">'+'<span class="weightSpan" style="'+weight+'">Weight:<input type="text" name="weight" size="5"></span>';
 		answersDiv.appendChild(newP);
 	}
 }
@@ -71,10 +106,17 @@ function choosedType(element)
 	var collectionNumberOfAnswers = document.getElementsByName('number-of-answer');
 	var n = currentQuestion.id.substring(currentQuestion.id.length-1);
 	var numberOfAnswers = collectionNumberOfAnswers[n-1];
+	var weightOrNot = document.getElementsByName('weight-select')[n-1].value;
+	var weightStyle;
+	if (weightOrNot==1)
+	{
+		weightStyle='visibility: visible;';
+	} else{
+		weightStyle='visibility: hidden;';
+	}
 	var count = numberOfAnswers.value;
 	while(answersDiv.firstChild)
 	{
-		console.log(answersDiv.firstChild);
 		answersDiv.removeChild(answersDiv.firstChild);
 	}
 	if (value==1)
@@ -83,7 +125,7 @@ function choosedType(element)
 		for (var i = 0; i<count; i++)
 		{
 			var newP = document.createElement('p');
-			newP.innerHTML='<input type="radio" name="'+(i+1)+'" disabled> <input type="text" name="answer'+(i+1)+'">'+'Weight:<input type="text" name="weight'+(i+1)+'" size="5">';
+			newP.innerHTML='<input type="radio" name="type"> <input type="text" name="answer">'+'<span class="weightSpan" style="'+weightStyle+'">Weight:<input type="text" name="weight" size="5"></span>';
 			answersDiv.appendChild(newP);
 		}
 	} else if (value==2)
@@ -92,14 +134,14 @@ function choosedType(element)
 		for (var i = 0; i<count; i++)
 		{
 			var newP = document.createElement('p');
-			newP.innerHTML='<input type="checkbox" name="'+(i+1)+'" disabled> <input type="text" name="answer'+(i+1)+'">'+'Weight:<input type="text" name="weight'+(i+1)+'" size="5">';
+			newP.innerHTML='<input type="checkbox" name="type"> <input type="text" name="answer">'+'<span class="weightSpan" style="'+weightStyle+'">Weight:<input type="text" name="weight" size="5"></span>';
 			answersDiv.appendChild(newP);
 		}
 	} else 
 	{
 		numberOfAnswers.disabled=true;
 		var newP = document.createElement('p');
-		newP.innerHTML='<input type="text" name="answer'+(i+1)+'">'+'Weight:<input type="text" name="weight'+(i+1)+'" size="5">';
+		newP.innerHTML='<input type="text" name="answer">'+'<span class="weightSpan" style="'+weightStyle+'">Weight:<input type="text" name="weight" size="5"></span>';
 		answersDiv.appendChild(newP);
 	}
 }
@@ -116,6 +158,7 @@ function submitForm()
 		//alert(m_data);
 
 		var data = {
+			token:window.authToken,
 			title:document.getElementsByName('title')[0].value,
 			description:document.getElementsByName('description')[0].value,
 			questions:new Array()
@@ -127,26 +170,64 @@ function submitForm()
 			var questionTitle = questions[i].getElementsByClassName('question-title')[0].querySelectorAll('input')[0].value;
 			var questionType = questions[i].getElementsByClassName('question-type')[0].value;
 			var numberOfAnswers = questions[i].getElementsByClassName('number-of-answer')[0].value;
+			var weightOrNot = questions[i].getElementsByClassName('weight-or-not')[0].value;
+			//alert(questionTitle+" "+questionType+" "+numberOfAnswers+" "+weightOrNot);
 			var answers = questions[i].getElementsByClassName('question-answers')[0].querySelectorAll('input');
-			//console.log(questionTitle+" "+questionType+" "+numberOfAnswers);
 			var stringAnswers = new Array();
 			var stringAnswersNumber=0;
-			var oneAnswer = {
-					title:'',
-					weight:0
-				};
+			function Answer (number, title, weight, right) {
+				this.number = number;
+				this.title = title;
+				this.weight = weight;
+				this.right = right;
+			}
+			// var oneAnswer = {
+			// 		number:0,
+			// 		title:'',
+			// 		weight:0,
+			// 		right:0
+			// 	};
+
+			var oneAnswer = new Answer(0,'',0,0);
 			for (var j = 0; j<answers.length; j++)
 			{
+				if (answers[j].type=='checkbox')
+				{
+					if (answers[j].checked)
+					{
+						oneAnswer.right=1;
+					}
+					else
+					{
+						oneAnswer.right=0;
+					}
+				}
+				if (answers[j].type=='radio')
+				{
+					if (answers[j].checked)
+					{
+						oneAnswer.right=1;
+					}
+					else
+					{
+						oneAnswer.right=0;
+					}
+				}
 				if (answers[j].name=='answer')
 				{
 					oneAnswer.title=answers[j].value;
-					//console.log(stringAnswers[j]);
 				}
 				if (answers[j].name=='weight')
 				{
-					oneAnswer.weight=answers[j].value;
-					//console.log(stringAnswers[j]);
-					stringAnswers[stringAnswersNumber]=oneAnswer;
+					if (weightOrNot==1)
+					{	
+						oneAnswer.weight=answers[j].value;
+					} else
+					{
+						oneAnswer.weight=0;
+					}
+					oneAnswer.number=stringAnswersNumber+1;
+					stringAnswers[stringAnswersNumber]=new Answer(oneAnswer.number, oneAnswer.title, oneAnswer.weight, oneAnswer.right);
 					stringAnswersNumber++;
 				}
 			}
@@ -161,7 +242,6 @@ function submitForm()
 		}
 		data = JSON.stringify(data);
 		alert(data);
-		//console.log(data.title+"  " + data.description);
 		$.ajax({
 			type: m_method,
 			url: m_action,

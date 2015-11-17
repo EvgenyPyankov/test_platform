@@ -35,5 +35,5 @@ public interface Constants {
 
     //errors
     String SMTH_IS_WRONG = "100";
-
+    String WRONG_TOKEN = "155";
 }
