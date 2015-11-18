@@ -84,15 +84,24 @@ function choosedNumberOfAnswers(element)
 	} else{
 		weight='visibility: hidden;';
 	}
-
+	var currentAnswers = new Array();
+	var count = 0;
 	while(answersDiv.firstChild)
 	{
+		if (answersDiv.firstChild instanceof HTMLParagraphElement) {
+			currentAnswers[count]=answersDiv.firstChild.querySelectorAll('input')[1].value;
+			count++;
+		}
 		answersDiv.removeChild(answersDiv.firstChild);
+	}
+	for (var x = count; x<number; x++)
+	{
+		currentAnswers[x]="";
 	}
 	for (var i = 0; i<number; i++)
 	{
 		var newP = document.createElement('p');
-		newP.innerHTML='<input type="'+type+'" name="type"> <input type="text" name="answer">'+'<span class="weightSpan" style="'+weight+'">Weight:<input type="text" name="weight" size="5"></span>';
+		newP.innerHTML='<input type="'+type+'" name="type"> <input type="text" name="answer" value="'+currentAnswers[i]+'">'+'<span class="weightSpan" style="'+weight+'">Weight:<input type="text" name="weight" size="5"></span>';
 		answersDiv.appendChild(newP);
 	}
 }
@@ -115,17 +124,29 @@ function choosedType(element)
 		weightStyle='visibility: hidden;';
 	}
 	var count = numberOfAnswers.value;
+	var currentAnswers = new Array();
+	var tmpN = 0;
 	while(answersDiv.firstChild)
 	{
+		if (answersDiv.firstChild instanceof HTMLParagraphElement) {
+			currentAnswers[tmpN]=answersDiv.firstChild.querySelectorAll('input')[1].value;
+			console.log(currentAnswers[tmpN]);
+			tmpN++;
+		}
 		answersDiv.removeChild(answersDiv.firstChild);
 	}
+	for (var x = tmpN; x<count; x++)
+	{
+		currentAnswers[x]="";
+	}
+
 	if (value==1)
 	{
 		numberOfAnswers.disabled=false;
 		for (var i = 0; i<count; i++)
 		{
 			var newP = document.createElement('p');
-			newP.innerHTML='<input type="radio" name="type"> <input type="text" name="answer">'+'<span class="weightSpan" style="'+weightStyle+'">Weight:<input type="text" name="weight" size="5"></span>';
+			newP.innerHTML='<input type="radio" name="type"> <input type="text" name="answer" value="'+currentAnswers[i]+'">'+'<span class="weightSpan" style="'+weightStyle+'">Weight:<input type="text" name="weight" size="5"></span>';
 			answersDiv.appendChild(newP);
 		}
 	} else if (value==2)
@@ -134,14 +155,14 @@ function choosedType(element)
 		for (var i = 0; i<count; i++)
 		{
 			var newP = document.createElement('p');
-			newP.innerHTML='<input type="checkbox" name="type"> <input type="text" name="answer">'+'<span class="weightSpan" style="'+weightStyle+'">Weight:<input type="text" name="weight" size="5"></span>';
+			newP.innerHTML='<input type="checkbox" name="type"> <input type="text" name="answer" value="'+currentAnswers[i]+'">'+'<span class="weightSpan" style="'+weightStyle+'">Weight:<input type="text" name="weight" size="5"></span>';
 			answersDiv.appendChild(newP);
 		}
 	} else 
 	{
 		numberOfAnswers.disabled=true;
 		var newP = document.createElement('p');
-		newP.innerHTML='<input type="text" name="answer">'+'<span class="weightSpan" style="'+weightStyle+'">Weight:<input type="text" name="weight" size="5"></span>';
+		newP.innerHTML='<input type="text" name="type" style="visibility:hidden;"><input type="text" name="answer" value="'+currentAnswers[0]+'">'+'<span class="weightSpan" style="'+weightStyle+'">Weight:<input type="text" name="weight" size="5"></span>';
 		answersDiv.appendChild(newP);
 	}
 }
