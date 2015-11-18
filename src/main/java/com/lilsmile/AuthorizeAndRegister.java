@@ -1,8 +1,8 @@
 package com.lilsmile;
 
-import bd.DBContorller;
-import bd.DBControllerMethods;
-import bd.User;
+import db.DBContorller;
+import db.DBControllerMethods;
+import db.entity.User;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;

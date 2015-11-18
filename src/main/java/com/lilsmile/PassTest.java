@@ -1,6 +1,9 @@
 package com.lilsmile;
 
-import bd.*;
+import db.*;
+import db.entity.Answer;
+import db.entity.Question;
+import db.entity.Test;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -63,7 +66,7 @@ public class PassTest implements Constants{
             sb.append(token.charAt(i));
         }
         String login = sb.toString();
-        //todo : add adding to bd
+        //todo : add adding to db
         StaticThings.writeInfo("get body:\n"+body);//log
         Mail mail = new Mail();
         mail.sendEmail(body);
@@ -75,7 +78,7 @@ public class PassTest implements Constants{
     @Consumes(MediaType.APPLICATION_JSON)
     public String createdTest(String body)
     {
-        //todo : add adding to bd
+        //todo : add adding to db
         JSONObject jsonObject = (JSONObject) JSONValue.parse(body);
         String token = (String) jsonObject.get(TOKEN);
         if (!StaticThings.checkToken(token))
