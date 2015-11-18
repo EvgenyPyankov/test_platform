@@ -45,6 +45,7 @@ function printQuestions(arg) {
 		output += '</div></div>';
 	}
 	return output;
+	//TODO: consider remaking with $createNode function (if there is one)
 }
 
 function printDescription(arg) {
@@ -61,12 +62,12 @@ function sendTestAnswers() {
 			data: JSON.stringify(data),
 			contentType: 'application/json; charset=utf-8',
 			headers: {"TOKEN": window.authToken},
-			async: false,
 			success: function (response) {
+				//TODO: Get something in response and show something
+				alert("Results have been sent. Press OK to return to tests list");
+				window.location.href = 'choose_test.html';
 			}
 		});
-		alert("Results have been sent. Press OK to return to tests list");
-		window.location.href = 'choose_test.html';
 	}
 }
 
@@ -172,17 +173,16 @@ function auth(username, hash) {
 	$.ajax({
 		url: 'rest/auth/login',
 		type: "POST",
-		data: JSON.stringify({"userName": username, "passHash": hash}),
+		data: JSON.stringify({"userName": username, "passHash": md5(hash)}),
 		dataType: "json",
 		contentType: 'application/json; charset=utf-8',
-		async: false,
 		success: function (response) {
 			if (response.result == 255) {
 				$("#emailHelp").html("Wrong login or email!");
 				$('#emailVal').addClass("has-error");
 			} else if (typeof response.token != 'undefined') {
 				document.cookie = "authToken=" + response.token;
-				window.location.href = 'choose_test.html';
+				window.location.href = 'menu.html';
 			}
 		}
 	});
@@ -196,7 +196,6 @@ function getCookie(cname) {
 		while (c.charAt(0) == ' ') c = c.substring(1);
 		if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
 	}
-	return;
 }
 
 function init() {
@@ -220,10 +219,9 @@ function logInGuest() {
 		data: JSON.stringify({"userName": "anonymous"}),
 		dataType: "json",
 		contentType: 'application/json; charset=utf-8',
-		async: true,
 		success: function (response) {
 			document.cookie = "authToken=" + response.token;
-			window.location.href = 'choose_test.html';
+			window.location.href = 'menu.html';
 		}
 	});
 }
@@ -233,10 +231,13 @@ function signUp() {
 		$.ajax({
 			url: 'rest/auth/signup',
 			type: "POST",
-			data: JSON.stringify({"userName": $("#inputUsernameReg").val(), "passHash": $("#inputPasswordReg").val(), "email": $("#inputEmailReg").val()}),
+			data: JSON.stringify({
+				"userName": $("#inputUsernameReg").val(),
+				"passHash": md5($("#inputPasswordReg").val()),
+				"email": $("#inputEmailReg").val()
+			}),
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
-			async: true,
 			success: function (response) {
 				if (response.result == 205) {
 					$('#unregVal').addClass("has-error");
@@ -250,5 +251,19 @@ function signUp() {
 			}
 		});
 	}
+}
+
+function logOut() {
+	$.ajax({
+		url: 'rest/auth/logout',
+		type: "POST",
+		data: JSON.stringify({"token": window.authToken}),
+		dataType: "json",
+		contentType: 'application/json; charset=utf-8',
+		success: function () {
+			document.cookie = 'authToken=; Max-Age=0';
+			window.location.href = 'index.html';
+		}
+	});
 }
 

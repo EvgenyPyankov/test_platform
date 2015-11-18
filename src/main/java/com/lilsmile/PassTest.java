@@ -156,7 +156,7 @@ public class PassTest implements Constants{
     private Test jsonToTest(JSONObject jsonTest)
     {
         String title = (String) jsonTest.get(TITLE);
-        String desctiption = (String) jsonTest.get(DESCRIPTION);
+        String description = (String) jsonTest.get(DESCRIPTION);
         JSONArray questionArr = (JSONArray) jsonTest.get(QUESTIONS);
         ArrayList<Question> questions = new ArrayList<Question>();
         for (int i = 0; i<questionArr.size(); i++)
@@ -178,7 +178,7 @@ public class PassTest implements Constants{
             Question currentQuestion = new Question(i,questionTitle,answers, Integer.valueOf(type).intValue());
             questions.add(currentQuestion);
         }
-        Test test = new Test(100,"author","category",title,desctiption, new Date(System.currentTimeMillis()), questions);
+        Test test = new Test(100,"author","category",title,description, new Date(System.currentTimeMillis()), questions);
         return test;
     }
 
