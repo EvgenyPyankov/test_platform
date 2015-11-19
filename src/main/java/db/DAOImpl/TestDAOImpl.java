@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class TestDAOImpl implements db.DAO.TestDAO {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Test> tests = null;
         tests = session.createCriteria(Test.class).list();
+        //List<Test> tests2 = new ArrayList<Test>(1);
+        //tests2.add(tests.get(0));
         if (session.isOpen()) session.close();
         StaticThings.writeInfo("yeyeyeyeyey"+ tests.size()+"   "+ tests.get(0).getTitle());
         return tests;

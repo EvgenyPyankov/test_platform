@@ -3,6 +3,7 @@
 var jsTest;
 
 function loadTests() {
+
 	$.ajax({
 		dataType: "json",
 		url: "rest/tests",
