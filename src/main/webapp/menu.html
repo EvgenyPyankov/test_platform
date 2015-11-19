@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Main Menu</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/light.css">
+	<script src="js/jquery-2.1.4.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/light.js"></script>
+	<script>init();</script>
+</head>
+<body>
+
+<div class="container col-md-6 col-md-offset-3" >
+	<h1 class="text-center" id="mainmenu">Main menu</h1>
+
+	<div class="col-md-4">
+		<input type="button" class="btn btn-lg btn-primary btn-block" value="Choose a Test"
+			   onclick="window.location.href = 'choose_test.html'">
+	</div>
+	<div class="col-md-4">
+		<input type="button" class="btn btn-lg btn-success btn-block" value="Create a Test"
+			   onclick="window.location.href = 'create_test.html'">
+	</div>
+	<div class="col-md-4">
+		<input type="button" class="btn btn-lg btn-danger btn-block" value="Logout"
+			   onclick="logOut();">
+	</div>
+
+
+</div>
+</body>
+</html>
