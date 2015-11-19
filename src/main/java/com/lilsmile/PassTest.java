@@ -33,6 +33,7 @@ public class PassTest implements Constants{
         try {
             tests = dbController.getTests();
             StaticThings.writeInfo("Send "+tests.size()+" tests. And in db there are "+dbController.getTests().size()+" tests");//log
+            StaticThings.writeInfo("Received"+tests.get(0).getTitle());
         } catch (SQLException e) {
             //e.printStackTrace();
             return SMTH_IS_WRONG;

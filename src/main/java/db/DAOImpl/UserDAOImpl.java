@@ -22,7 +22,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public User getUserByEmail(String email) throws SQLException {
-        Session session = session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
         List<User> results = null;
 
         String hql = String.format("FROM User E WHERE E.email = '%s'", email);

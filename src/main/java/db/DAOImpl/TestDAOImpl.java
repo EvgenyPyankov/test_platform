@@ -1,5 +1,6 @@
 package db.DAOImpl;
 
+import com.lilsmile.StaticThings;
 import db.entity.*;
 import db.hibernate.HibernateUtil;
 import org.hibernate.Query;
@@ -32,6 +33,7 @@ public class TestDAOImpl implements db.DAO.TestDAO {
         List<Test> tests = null;
         tests = session.createCriteria(Test.class).list();
         if (session.isOpen()) session.close();
+        StaticThings.writeInfo("yeyeyeyeyey"+ tests.size()+"   "+ tests.get(0).getTitle());
         return tests;
     }
 
