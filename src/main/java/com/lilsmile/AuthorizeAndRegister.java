@@ -11,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import java.sql.SQLException;
 import java.util.Random;
 
 /**
@@ -32,6 +33,7 @@ public class AuthorizeAndRegister implements Constants {
     @Consumes(MediaType.APPLICATION_JSON)
     public String logIn(String body) {
         try {
+
             JSONObject jsonBody = (JSONObject) JSONValue.parse(body);
             StringBuilder logBuilder = new StringBuilder();
             String login = (String) jsonBody.get(LOGIN);
@@ -86,19 +88,24 @@ public class AuthorizeAndRegister implements Constants {
         String email = (String) jsonBody.get(EMAIL);
         String login = (String) jsonBody.get(LOGIN);
         String password = (String) jsonBody.get(PASSWORD);
-        if (dbController.getUserByLogin(login) == null) {
-            if (dbController.getUserByEmail(email) == null) {
-                dbController.addUser(new User(login, email, password.hashCode()));
-                response.put(RESULT, OK);
-                StaticThings.writeInfo("user: "+login+" successfully created");
-                //response.put(TOKEN, generateToken(login)); //we said that signup should return OK code, not a token
+        try {
+            if (dbController.getUserByLogin(login) == null) {
+                if (dbController.getUserByEmail(email) == null) {
+                    dbController.addUser(new User(login, email, password.hashCode()));
+                    response.put(RESULT, OK);
+                    StaticThings.writeInfo("user: "+login+" successfully created");
+                    //response.put(TOKEN, generateToken(login)); //we said that signup should return OK code, not a token
+                } else {
+                    StaticThings.writeInfo("tryna signup with existing email");
+                    response.put(RESULT, BAD_EMAIL);
+                }
             } else {
-                StaticThings.writeInfo("tryna signup with existing email");
-                response.put(RESULT, BAD_EMAIL);
+                StaticThings.writeInfo("tryna signup with existing login");
+                response.put(RESULT, BAD_LOGIN);
             }
-        } else {
-            StaticThings.writeInfo("tryna signup with existing login");
-            response.put(RESULT, BAD_LOGIN);
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            return SMTH_IS_WRONG;
         }
 
         return response.toString();

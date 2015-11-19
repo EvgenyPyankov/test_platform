@@ -4,6 +4,7 @@ import db.*;
 import db.entity.Answer;
 import db.entity.Question;
 import db.entity.Test;
+import db.entity.TestCategory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -11,8 +12,8 @@ import org.json.simple.JSONValue;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Created by Smile on 04.11.15.
@@ -28,8 +29,15 @@ public class PassTest implements Constants{
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllTests() //do not need token
     {
-        ArrayList<Test> tests = dbController.getTests();
-        StaticThings.writeInfo("Send "+tests.size()+" tests. And in db there are "+dbController.getTests().size()+" tests");//log
+        List<Test> tests = null;
+        try {
+            tests = dbController.getTests();
+            StaticThings.writeInfo("Send "+tests.size()+" tests. And in db there are "+dbController.getTests().size()+" tests");//log
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            return SMTH_IS_WRONG;
+        }
+
         JSONArray jsonArray = new JSONArray();
         for (Test test : tests)
         {
@@ -44,7 +52,12 @@ public class PassTest implements Constants{
     public String getTestById(@QueryParam("id") String idString)
     {
         StaticThings.writeInfo("Send test #"+idString);//log
-        return testToJSON(dbController.getTestById(Integer.valueOf(idString).intValue())).toString();
+        try {
+            return testToJSON(dbController.getTestById(Integer.valueOf(idString).intValue())).toString();
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            return SMTH_IS_WRONG;
+        }
     }
 
     @POST
@@ -90,14 +103,14 @@ public class PassTest implements Constants{
         try {
             dbController.addTest(jsonToTest((JSONObject) JSONValue.parse(body)));
             StaticThings.writeInfo("get test all right. With this one there are "+dbController.getTests().size()+" tests.");//log
-            ArrayList<Test> tests = dbController.getTests();
+            List<Test> tests = dbController.getTests();
             StringBuilder sb = new StringBuilder();
             for (Test test : tests)
             {
                 sb.append(test.toString()+"\n");
             }
             StaticThings.writeInfo("And they are:\n"+sb.toString());
-        } catch (Exception e)
+        } catch (SQLException e)
         {
             StackTraceElement[] stackTraceElements = e.getStackTrace();
             StringBuilder sb = new StringBuilder();
@@ -139,14 +152,14 @@ public class PassTest implements Constants{
         sb.append(day);
         currentTest.put(DATE,sb.toString());
         currentTest.put(DESCRIPTION,test.getDescription());
-        ArrayList<Question> questions = test.getQuestions();
+        Set<Question> questions = test.getQuestions();
         JSONArray jsonArrayQuestions = new JSONArray();
         for (Question question : questions)
         {
             JSONObject currentQuestion = new JSONObject();
             currentQuestion.put(NUMBER, question.getNumber());
             currentQuestion.put(TITLE, question.getTitle());
-            ArrayList<Answer> answers = question.getAnswers();
+            Set<Answer> answers = question.getAnswers();
             JSONArray jsonArrayAnswers = new JSONArray();
             for (Answer answer : answers)
             {
@@ -168,7 +181,7 @@ public class PassTest implements Constants{
         String title = (String) jsonTest.get(TITLE);
         String description = (String) jsonTest.get(DESCRIPTION);
         JSONArray questionArr = (JSONArray) jsonTest.get(QUESTIONS);
-        ArrayList<Question> questions = new ArrayList<Question>();
+        Set<Question> questions = new HashSet<Question>();
         for (int i = 0; i<questionArr.size(); i++)
         {
             JSONObject currentQuestionJSON = (JSONObject) questionArr.get(i);
@@ -176,19 +189,25 @@ public class PassTest implements Constants{
             int type = Integer.valueOf((String) currentQuestionJSON.get(TYPE));
             int number = Integer.valueOf((String) currentQuestionJSON.get(NUMBER));
             JSONArray answersJSON = (JSONArray) currentQuestionJSON.get(ANSWERS_ARR);
-            ArrayList<Answer> answers = new ArrayList<Answer>();
+            Set<Answer> answers = new HashSet<Answer>();
             for (int j = 0; j<answersJSON.size(); j++)
             {
                 JSONObject currentAnswerJSON = (JSONObject) answersJSON.get(i);
                 String answerTitle = (String) currentAnswerJSON.get(TITLE);
                 //int weight = ((Integer) currentAnswerJSON.get(WEIGHT)).intValue();
-                Answer currentAnswer = new Answer(j,answerTitle,0);
+                Answer currentAnswer = new Answer(j,answerTitle);
                 answers.add(currentAnswer);
             }
             Question currentQuestion = new Question(i,questionTitle,answers, Integer.valueOf(type).intValue());
             questions.add(currentQuestion);
         }
-        Test test = new Test(100,"author","category",title,description, new Date(System.currentTimeMillis()), questions);
+        Test test = null;
+        try {
+            test = new Test(title, TestCategory.QUESTIONAIRE, questions, dbController.getUserByEmail("king@gmail.com"));//todo: fix it
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            return null;
+        }
         return test;
     }
 
