@@ -176,7 +176,6 @@ function submitForm()
 		var m_action=$(this).attr('action');
 		//var m_data=$(this).serialize();
 		//m_data= JSON.stringify(m_data);
-		//alert(m_data);
 
 		var data = {
 			token:window.authToken,
@@ -192,7 +191,6 @@ function submitForm()
 			var questionType = questions[i].getElementsByClassName('question-type')[0].value;
 			var numberOfAnswers = questions[i].getElementsByClassName('number-of-answer')[0].value;
 			var weightOrNot = questions[i].getElementsByClassName('weight-or-not')[0].value;
-			//alert(questionTitle+" "+questionType+" "+numberOfAnswers+" "+weightOrNot);
 			var answers = questions[i].getElementsByClassName('question-answers')[0].querySelectorAll('input');
 			var stringAnswers = new Array();
 			var stringAnswersNumber=0;
@@ -262,7 +260,6 @@ function submitForm()
 			data.questions[i]=damnCurentQuestion;
 		}
 		data = JSON.stringify(data);
-		alert(data);
 		$.ajax({
 			type: m_method,
 			url: m_action,

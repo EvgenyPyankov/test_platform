@@ -26,12 +26,12 @@ public class PassTest implements Constants{
     public String getAllTests() //do not need token
     {
         ArrayList<Test> tests = dbController.getTests();
+        StaticThings.writeInfo("Send "+tests.size()+" tests. And in db there are "+dbController.getTests().size()+" tests");//log
         JSONArray jsonArray = new JSONArray();
         for (Test test : tests)
         {
             jsonArray.add(testToJSON(test));
         }
-        StaticThings.writeInfo("Send all tests");//log
         return jsonArray.toString();
     }
 
@@ -86,7 +86,14 @@ public class PassTest implements Constants{
 
         try {
             dbController.addTest(jsonToTest((JSONObject) JSONValue.parse(body)));
-            StaticThings.writeInfo("get test all right:\n" + body);//log
+            StaticThings.writeInfo("get test all right. With this one there are "+dbController.getTests().size()+" tests.");//log
+            ArrayList<Test> tests = dbController.getTests();
+            StringBuilder sb = new StringBuilder();
+            for (Test test : tests)
+            {
+                sb.append(test.toString()+"\n");
+            }
+            StaticThings.writeInfo("And they are:\n"+sb.toString());
         } catch (Exception e)
         {
             StackTraceElement[] stackTraceElements = e.getStackTrace();
@@ -171,8 +178,8 @@ public class PassTest implements Constants{
             {
                 JSONObject currentAnswerJSON = (JSONObject) answersJSON.get(i);
                 String answerTitle = (String) currentAnswerJSON.get(TITLE);
-                int weight = Integer.valueOf((String) currentAnswerJSON.get(WEIGHT));
-                Answer currentAnswer = new Answer(j,answerTitle,Integer.valueOf(weight).intValue());
+                //int weight = ((Integer) currentAnswerJSON.get(WEIGHT)).intValue();
+                Answer currentAnswer = new Answer(j,answerTitle,0);
                 answers.add(currentAnswer);
             }
             Question currentQuestion = new Question(i,questionTitle,answers, Integer.valueOf(type).intValue());
