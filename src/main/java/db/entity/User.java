@@ -61,7 +61,7 @@ public class User {
     }
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
     public Set<Test> getTests() {
         return tests;
     }
@@ -70,7 +70,7 @@ public class User {
         this.tests = tests;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     public Set<UserPass> getUserPassSet() {
         return userPassSet;
     }
@@ -79,15 +79,15 @@ public class User {
         this.userPassSet = userPassSet;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "idUser=" + idUser +
-                ", login='" + login + '\'' +
-                ", password=" + password +
-                ", email='" + email + '\'' +
-                ", tests=" + tests +
-                ", userPassSet=" + userPassSet +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "idUser=" + idUser +
+//                ", login='" + login + '\'' +
+//                ", password=" + password +
+//                ", email='" + email + '\'' +
+//                ", tests=" + tests +
+//                ", userPassSet=" + userPassSet +
+//                '}';
+//    }
 }

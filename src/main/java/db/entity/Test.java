@@ -127,19 +127,19 @@ public class Test {
     }
 
 
-    @Override
-    public String toString() {
-        return "Test{" +
-                "idTest=" + idTest +
-                ", title='" + title + '\'' +
-                ", testCategory=" + testCategory +
-                ", questions=" + questions +
-                ", description='" + description + '\'' +
-                ", date=" + date +
-                ", author=" + author +
-                ", possibleResults=" + possibleResults +
-                ", userPassSet=" + userPassSet +
-                ", textResult='" + textResult + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Test{" +
+//                "idTest=" + idTest +
+//                ", title='" + title + '\'' +
+//                ", testCategory=" + testCategory +
+//                ", questions=" + questions +
+//                ", description='" + description + '\'' +
+//                ", date=" + date +
+//                ", author=" + author +
+//                ", possibleResults=" + possibleResults +
+//                ", userPassSet=" + userPassSet +
+//                ", textResult='" + textResult + '\'' +
+//                '}';
+//    }
 }

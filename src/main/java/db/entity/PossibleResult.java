@@ -61,7 +61,7 @@ public class PossibleResult {
         this.maxLimit = maxLimit;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_test", nullable = false)
     public Test getTest() {
         return test;
@@ -71,7 +71,7 @@ public class PossibleResult {
         this.test = test;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "result")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "result")
     public Set<UserPass> getUserPassSet() {
         return userPassSet;
     }

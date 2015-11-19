@@ -89,16 +89,16 @@ public class Answer {
         this.isChoosed = isChoosed;
     }
 
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "idAnswer=" + idAnswer +
-                ", title='" + title + '\'' +
-                ", number=" + number +
-                ", question=" + question +
-                ", weight=" + weight +
-                ", isChoosed=" + isChoosed +
-                ", userAnswers=" + userAnswers +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Answer{" +
+//                "idAnswer=" + idAnswer +
+//                ", title='" + title + '\'' +
+//                ", number=" + number +
+//                ", question=" + question +
+//                ", weight=" + weight +
+//                ", isChoosed=" + isChoosed +
+//                ", userAnswers=" + userAnswers +
+//                '}';
+//    }
 }

@@ -43,7 +43,7 @@ public class UserPass {
         this.date = date;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_result")
     public PossibleResult getResult() {
         return result;
@@ -53,7 +53,7 @@ public class UserPass {
         this.result = result;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_test", nullable = false)
     public Test getTest() {
         return test;
@@ -63,7 +63,7 @@ public class UserPass {
         this.test = test;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", nullable = false)
     public User getUser() {
         return user;
@@ -73,7 +73,7 @@ public class UserPass {
         this.user = user;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userPass")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "userPass")
     public Set<UserAnswer> getUserAnswers() {
         return userAnswers;
     }
@@ -82,14 +82,14 @@ public class UserPass {
         this.userAnswers = userAnswers;
     }
 
-    @Override
-    public String toString() {
-        return "UserPass{" +
-                "id=" + id +
-                ", date=" + date +
-                ", userAnswers=" + userAnswers +
-                ", test=" + test.getTitle() +
-                ", user=" + user.getLogin() +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "UserPass{" +
+//                "id=" + id +
+//                ", date=" + date +
+//                ", userAnswers=" + userAnswers +
+//                ", test=" + test.getTitle() +
+//                ", user=" + user.getLogin() +
+//                '}';
+//    }
 }

@@ -40,7 +40,7 @@ public class UserAnswer {
         this.text = text;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user_pass", nullable = false)
     public UserPass getUserPass() {
         return userPass;
@@ -50,7 +50,7 @@ public class UserAnswer {
         this.userPass = userPass;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_question", nullable = false)
     public Question getQuestion() {
         return question;
@@ -60,7 +60,7 @@ public class UserAnswer {
         this.question = question;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_answer")
     public Answer getAnswer() {
         return answer;
@@ -71,10 +71,10 @@ public class UserAnswer {
     }
 
 
-    @Override
-    public String toString() {
-        return "UserAnswer{" +
-                "id=" + id +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "UserAnswer{" +
+//                "id=" + id +
+//                '}';
+//    }
 }

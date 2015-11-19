@@ -108,17 +108,17 @@ public class Question {
         this.answerText = answerText;
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "idQuestion=" + idQuestion +
-                ", title='" + title + '\'' +
-                ", number=" + number +
-                ", test=" + test +
-                ", answers=" + answers +
-                ", questionType=" + questionType +
-                ", userAnswers=" + userAnswers +
-                ", answerText='" + answerText + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Question{" +
+//                "idQuestion=" + idQuestion +
+//                ", title='" + title + '\'' +
+//                ", number=" + number +
+//                ", test=" + test +
+//                ", answers=" + answers +
+//                ", questionType=" + questionType +
+//                ", userAnswers=" + userAnswers +
+//                ", answerText='" + answerText + '\'' +
+//                '}';
+//    }
 }
