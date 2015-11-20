@@ -3,6 +3,7 @@ package db.DAOImpl;
 import com.lilsmile.StaticThings;
 import db.entity.*;
 import db.hibernate.HibernateUtil;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -32,11 +33,14 @@ public class TestDAOImpl implements db.DAO.TestDAO {
     public List<Test> getTests() throws SQLException {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Test> tests = null;
-        tests = session.createCriteria(Test.class).list();
+        //tests = session.createCriteria(Test.class).list();
+        Criteria criteria = session.createCriteria(Test.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        tests = criteria.list();
         //List<Test> tests2 = new ArrayList<Test>(1);
         //tests2.add(tests.get(0));
         if (session.isOpen()) session.close();
-        StaticThings.writeInfo("yeyeyeyeyey"+ tests.size()+"   "+ tests.get(0).getTitle());
+        //StaticThings.writeInfo("yeyeyeyeyey"+ tests.size()+"   "+ tests.get(0).getTitle());
         return tests;
     }
 
