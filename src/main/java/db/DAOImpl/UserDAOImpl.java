@@ -1,5 +1,6 @@
 package db.DAOImpl;
 
+import com.lilsmile.StaticThings;
 import db.DAO.UserDAO;
 import db.entity.User;
 import db.hibernate.HibernateUtil;
@@ -28,7 +29,7 @@ public class UserDAOImpl implements UserDAO {
         String hql = String.format("FROM User E WHERE E.email = '%s'", email);
         Query query = session.createQuery(hql);
         results = query.list();
-        if (results != null) return results.get(0);
+        if (results != null && results.size()>0) return results.get(0);
 
         if (session != null && session.isOpen()) {
             session.close();
@@ -50,7 +51,7 @@ public class UserDAOImpl implements UserDAO {
         if (session != null && session.isOpen()) {
             session.close();
         }
-        if (results != null) return results.get(0);
+        if (results != null && results.size()>0) return results.get(0);
         return null;
     }
 
