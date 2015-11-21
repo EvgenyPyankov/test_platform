@@ -35,7 +35,10 @@ public class PassTest implements Constants{
             StaticThings.writeInfo("Send "+tests.size()+" tests. And in db there are "+dbController.getTests().size()+" tests");//log
         } catch (SQLException e) {
             //e.printStackTrace();
-            return SMTH_IS_WRONG;
+            StaticThings.writeInfo(e.getMessage());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(RESULT, SMTH_IS_WRONG);
+            return jsonObject.toString();
         }
 
         JSONArray jsonArray = new JSONArray();
@@ -55,8 +58,10 @@ public class PassTest implements Constants{
         try {
             return testToJSON(dbController.getTestById(Integer.valueOf(idString).intValue())).toString();
         } catch (SQLException e) {
-            //e.printStackTrace();
-            return SMTH_IS_WRONG;
+            StaticThings.writeInfo(e.getMessage());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(RESULT, SMTH_IS_WRONG);
+            return jsonObject.toString();
         }
     }
 
@@ -70,7 +75,9 @@ public class PassTest implements Constants{
 
         if (!StaticThings.checkToken(token))
         {
-            return WRONG_TOKEN;
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put(RESULT, WRONG_TOKEN);
+            return jsonObject1.toString();
         }
 
         StringBuilder sb = new StringBuilder();
@@ -83,7 +90,9 @@ public class PassTest implements Constants{
         StaticThings.writeInfo("get body:\n"+body);//log
         Mail mail = new Mail();
         mail.sendEmail(body);
-        return OK;
+        JSONObject jsonObject1 = new JSONObject();
+        jsonObject1.put(RESULT, OK);
+        return jsonObject1.toString();
     }
 
     @POST
@@ -92,24 +101,20 @@ public class PassTest implements Constants{
     public String createdTest(String body)
     {
         //todo : add adding to db
+        StaticThings.writeInfo(body);
         JSONObject jsonObject = (JSONObject) JSONValue.parse(body);
         String token = (String) jsonObject.get(TOKEN);
         if (!StaticThings.checkToken(token))
         {
             StaticThings.writeInfo("got new test with wrong token");
-            return WRONG_TOKEN;
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put(RESULT, WRONG_TOKEN);
+            return jsonObject1.toString();
         }
 
         try {
             dbController.addTest(jsonToTest((JSONObject) JSONValue.parse(body)));
             StaticThings.writeInfo("get test all right. With this one there are "+dbController.getTests().size()+" tests.");//log
-            List<Test> tests = dbController.getTests();
-            StringBuilder sb = new StringBuilder();
-            for (Test test : tests)
-            {
-                sb.append(test.toString()+"\n");
-            }
-            StaticThings.writeInfo("And they are:\n"+sb.toString());
         } catch (SQLException e)
         {
             StackTraceElement[] stackTraceElements = e.getStackTrace();
@@ -119,9 +124,13 @@ public class PassTest implements Constants{
                 sb.append(stackTraceElements[i].toString()+"\n");
             }
             StaticThings.writeInfo(sb.toString());//log
-            return SMTH_IS_WRONG;
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put(RESULT, SMTH_IS_WRONG);
+            return jsonObject1.toString();
         }
-        return OK;
+        JSONObject jsonObject1 = new JSONObject();
+        jsonObject1.put(RESULT, OK);
+        return jsonObject1.toString();
     }
 
 
@@ -131,9 +140,10 @@ public class PassTest implements Constants{
     {
         JSONObject currentTest = new JSONObject();
         currentTest.put(TEST_ID,test.getIdTest());
-        currentTest.put(TEST_CATEGORY,test.getTestCategory());
+        TestCategory testCategory = test.getTestCategory();
+        currentTest.put(TEST_CATEGORY,testCategory.name());
         currentTest.put(TITLE,test.getTitle());
-        currentTest.put(AUTHOR,test.getAuthor());
+        currentTest.put(AUTHOR,test.getAuthor().getLogin());
         Date date = test.getDate();
         int year = date.getYear()+1900;
         int month = date.getMonth();
@@ -179,6 +189,7 @@ public class PassTest implements Constants{
     private Test jsonToTest(JSONObject jsonTest)
     {
         String title = (String) jsonTest.get(TITLE);
+        String token = (String) jsonTest.get(TOKEN);
         String description = (String) jsonTest.get(DESCRIPTION);
         JSONArray questionArr = (JSONArray) jsonTest.get(QUESTIONS);
         Set<Question> questions = new HashSet<Question>();
@@ -192,7 +203,7 @@ public class PassTest implements Constants{
             Set<Answer> answers = new HashSet<Answer>();
             for (int j = 0; j<answersJSON.size(); j++)
             {
-                JSONObject currentAnswerJSON = (JSONObject) answersJSON.get(i);
+                JSONObject currentAnswerJSON = (JSONObject) answersJSON.get(j);
                 String answerTitle = (String) currentAnswerJSON.get(TITLE);
                 //int weight = ((Integer) currentAnswerJSON.get(WEIGHT)).intValue();
                 Answer currentAnswer = new Answer(j,answerTitle);
@@ -203,7 +214,8 @@ public class PassTest implements Constants{
         }
         Test test = null;
         try {
-            test = new Test(title, TestCategory.QUESTIONAIRE, questions, dbController.getUserByEmail("king@gmail.com"));//todo: fix it
+            test = new Test(title, TestCategory.QUESTIONAIRE, questions, dbController.getUserByLogin(StaticThings.loginFromToken(token)));//todo: fix it
+            test.setDescription(description);
         } catch (SQLException e) {
             //e.printStackTrace();
             return null;

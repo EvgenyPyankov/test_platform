@@ -55,6 +55,14 @@ public class StaticThings {
         logger.info(message);
     }
 
-
+    public static String loginFromToken(String token)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i<token.length(); i+=2)
+        {
+            sb.append(token.charAt(i));
+        }
+        return sb.toString();
+    }
 
 }

@@ -32,15 +32,15 @@ public class AuthorizeAndRegister implements Constants {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public String logIn(String body) {
+        JSONObject jsonBody = (JSONObject) JSONValue.parse(body);
+        StringBuilder logBuilder = new StringBuilder();
+        String login = (String) jsonBody.get(LOGIN);
+        logBuilder.append("login:" + login + "\n");
+        String password = (String) jsonBody.get(PASSWORD);
+        JSONObject response = new JSONObject();
+        User currentUser = null;
         try {
-
-            JSONObject jsonBody = (JSONObject) JSONValue.parse(body);
-            StringBuilder logBuilder = new StringBuilder();
-            String login = (String) jsonBody.get(LOGIN);
-            logBuilder.append("login:"+login+"\n");
-            String password = (String) jsonBody.get(PASSWORD);
-            JSONObject response = new JSONObject();
-            User currentUser = dbController.getUserByEmail(login);
+            currentUser = dbController.getUserByEmail(login);
             if (currentUser == null) {
                 currentUser = dbController.getUserByLogin(login);
                 if (currentUser == null) {
@@ -50,16 +50,22 @@ public class AuthorizeAndRegister implements Constants {
                     return response.toString();
                 }
             }
+        } catch (SQLException ex)
+        {
+            StaticThings.writeInfo(ex.getMessage());
+            response.put(RESULT, SMTH_IS_WRONG);
+            return response.toString();
+        }
+        if (currentUser.getPassword()==password.hashCode()) {
             String token = generateToken(currentUser.getLogin());
-            logBuilder.append("token: "+token);
+            logBuilder.append("token: " + token);
             StaticThings.addToken(token);
             response.put(TOKEN, token);
-
-            return response.toString();
-        } catch (Exception e) {
-            logException(e);
-            return null;
+        } else
+        {
+            response.put(RESULT, WRONG_PASSWORD);
         }
+        return response.toString();
 
     }
 
@@ -82,7 +88,6 @@ public class AuthorizeAndRegister implements Constants {
     @Path("/signup")
     @Consumes(MediaType.APPLICATION_JSON)
     public String signUp(String body) {
-        //StaticThings.writeInfo(body);//log
         JSONObject response = new JSONObject();
         JSONObject jsonBody = (JSONObject) JSONValue.parse(body);
         String email = (String) jsonBody.get(EMAIL);
@@ -94,7 +99,6 @@ public class AuthorizeAndRegister implements Constants {
                     dbController.addUser(new User(login, email, password.hashCode()));
                     response.put(RESULT, OK);
                     StaticThings.writeInfo("user: "+login+" successfully created");
-                    //response.put(TOKEN, generateToken(login)); //we said that signup should return OK code, not a token
                 } else {
                     StaticThings.writeInfo("tryna signup with existing email");
                     response.put(RESULT, BAD_EMAIL);
@@ -105,7 +109,8 @@ public class AuthorizeAndRegister implements Constants {
             }
         } catch (SQLException e) {
             //e.printStackTrace();
-            return SMTH_IS_WRONG;
+            response.put(RESULT, SMTH_IS_WRONG);
+            return response.toString();
         }
 
         return response.toString();
@@ -133,8 +138,10 @@ public class AuthorizeAndRegister implements Constants {
         JSONObject jsonObject = (JSONObject) JSONValue.parse(body);
         String token = (String) jsonObject.get(TOKEN);
         StaticThings.deleteToken(token);
-        StaticThings.writeInfo("logout user "+loginFromToken(token));
-        return OK;
+        StaticThings.writeInfo("logout user "+StaticThings.loginFromToken(token));
+        JSONObject response = new JSONObject();
+        response.put(RESULT, OK);
+        return response.toString();
     }
 
 
@@ -148,15 +155,7 @@ public class AuthorizeAndRegister implements Constants {
         StaticThings.writeInfo(sb.toString());//log
     }
 
-    private String loginFromToken(String token)
-    {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i<token.length(); i+=2)
-        {
-            sb.append(token.charAt(i));
-        }
-        return sb.toString();
-    }
+
 
 
 
