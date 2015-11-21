@@ -13,6 +13,7 @@ public interface Constants {
     String DATE = "date";
     String QUESTIONS = "questions";
     String ANSWERS = "answers";
+    String ANSWER = "answer";
     String NUMBER = "number";
     String WEIGHT = "weight";
     String TOKEN = "token";

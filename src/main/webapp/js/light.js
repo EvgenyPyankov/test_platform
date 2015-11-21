@@ -88,7 +88,7 @@ function populateData() {
 }
 
 function checkRadios() {
-	for (var i = 1; i < $(".panel-body").length + 1; i++) {
+	for (var i = 1; i < $(".panel-body").length+1; i++) {//todo check it
 		if (!$("input[name='optradio" + i + "']:checked").val()) {
 			alert("Please, answer question number " + i);
 			return false;

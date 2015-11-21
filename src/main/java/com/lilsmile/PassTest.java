@@ -80,19 +80,22 @@ public class PassTest implements Constants{
             return jsonObject1.toString();
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i<token.length(); i+=2)
-        {
-            sb.append(token.charAt(i));
-        }
-        String login = sb.toString();
+       String login = StaticThings.loginFromToken(token);
         //todo : add adding to db
-        StaticThings.writeInfo("get body:\n"+body);//log
-        Mail mail = new Mail();
-        mail.sendEmail(body);
-        JSONObject jsonObject1 = new JSONObject();
-        jsonObject1.put(RESULT, OK);
-        return jsonObject1.toString();
+        Test test = passedJSONToTest(jsonObject);
+        try {
+            dbController.addPassedTest(test, dbController.getUserByLogin(login));
+            StaticThings.writeInfo("get body:\n"+body);//log
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put(RESULT, OK);
+            return jsonObject1.toString();
+        } catch (SQLException e) {
+            StaticThings.writeInfo(e.getMessage());
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put(RESULT, SMTH_IS_WRONG);
+            return jsonObject1.toString();
+        }
+
     }
 
     @POST
@@ -239,5 +242,43 @@ public class PassTest implements Constants{
     }
 
 
+    private Test passedJSONToTest (JSONObject jsonTest)
+    {
+        String testID = (String) jsonTest.get(TEST_ID);
+        String token = (String) jsonTest.get(TOKEN);
+
+        JSONArray questionArr = (JSONArray) jsonTest.get(QUESTIONS);
+        Set<Question> questions = new HashSet<Question>();
+        for (int i = 0; i<questionArr.size(); i++)
+        {
+            JSONObject currentQuestionJSON = (JSONObject) questionArr.get(i);
+            String questionTitle = (String) currentQuestionJSON.get(TITLE);
+            int type = Integer.valueOf((String) currentQuestionJSON.get(TYPE));
+            int number = Integer.valueOf((String) currentQuestionJSON.get(NUMBER));
+            String answer = (String) currentQuestionJSON.get(ANSWER);
+            Question currentQuestion = null;
+            if (type==2)
+            {
+                currentQuestion = new Question(i, questionTitle, type);
+                currentQuestion.setAnswerText(answer);
+                questions.add(currentQuestion);
+            } else {
+                Set<Answer> answers = new HashSet<Answer>();
+                Answer currentAnswer = new Answer(0,answer);
+                currentAnswer.setIsChoosed(1);//todo fix it
+                currentQuestion = new Question(i,questionTitle, answers, type);
+                questions.add(currentQuestion);
+            }
+
+        }
+        try {
+            Test test = dbController.getTestById(Integer.valueOf(testID));
+            test.setQuestions(questions);
+            return test;
+        } catch (SQLException e) {
+            StaticThings.writeInfo(e.getMessage());
+            return null;
+        }
+    }
 
 }
