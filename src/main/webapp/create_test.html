@@ -21,7 +21,12 @@
 <form method="POST" action="rest/tests/created_test" id="form">
 	<div class="form-header">
 		<p>Title:</p> <input type="text" name="title">
-		<p>Description:</p><textarea name="description"></textarea>
+		<p>Description:</p><textarea name="description"></textarea></div>
+		<p><select name="category">
+			<option disabled selected>Choose category of the text</option>
+			<option value="1">Questionaire</option>
+			<option value="2">Math</option>
+		</select></p>
 	</div>
 	<div id="questions">
 		<div class="question" id="question1">

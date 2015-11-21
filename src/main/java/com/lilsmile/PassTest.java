@@ -141,7 +141,7 @@ public class PassTest implements Constants{
         JSONObject currentTest = new JSONObject();
         currentTest.put(TEST_ID,test.getIdTest());
         TestCategory testCategory = test.getTestCategory();
-        currentTest.put(TEST_CATEGORY,testCategory.name());
+        currentTest.put(TEST_CATEGORY,testCategory.name().toLowerCase());
         currentTest.put(TITLE,test.getTitle());
         currentTest.put(AUTHOR,test.getAuthor().getLogin());
         Date date = test.getDate();
@@ -191,6 +191,21 @@ public class PassTest implements Constants{
         String title = (String) jsonTest.get(TITLE);
         String token = (String) jsonTest.get(TOKEN);
         String description = (String) jsonTest.get(DESCRIPTION);
+        int intCategory = Integer.valueOf((String) jsonTest.get(TEST_CATEGORY)).intValue();
+        TestCategory testCategory = null;
+        switch (intCategory)
+        {
+            case 1:
+            {
+                testCategory = TestCategory.QUESTIONAIRE;
+                break;
+            }
+            case 2:
+            {
+                testCategory = TestCategory.MATH;
+                break;
+            }
+        }
         JSONArray questionArr = (JSONArray) jsonTest.get(QUESTIONS);
         Set<Question> questions = new HashSet<Question>();
         for (int i = 0; i<questionArr.size(); i++)
@@ -214,7 +229,7 @@ public class PassTest implements Constants{
         }
         Test test = null;
         try {
-            test = new Test(title, TestCategory.QUESTIONAIRE, questions, dbController.getUserByLogin(StaticThings.loginFromToken(token)));//todo: fix it
+            test = new Test(title, testCategory, questions, dbController.getUserByLogin(StaticThings.loginFromToken(token)));//todo: fix it
             test.setDescription(description);
         } catch (SQLException e) {
             //e.printStackTrace();

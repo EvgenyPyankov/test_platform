@@ -197,6 +197,7 @@ function submitForm()
 			token:window.authToken,
 			title:document.getElementsByName('title')[0].value,
 			description:document.getElementsByName('description')[0].value,
+			test_category:document.getElementsByName('category')[0].value,
 			questions:new Array()
 			};
 
